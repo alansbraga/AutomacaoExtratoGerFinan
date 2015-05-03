@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{03D3DBAC-7346-4C92-8683-A0FE6D024609}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AEGF.BancosViaSite</RootNamespace>
+    <AssemblyName>AEGF.BancosViaSite</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Fayu.Qa.Selenium.Framework">
+      <HintPath>..\packages\Fayu.Qa.Selenium.Framework.2.0.2\lib\Fayu.Qa.Selenium.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Selenium.WebDriver.Extensions">
+      <HintPath>..\packages\Selenium.WebDriver.Extensions.1.5.457\lib\net45\Selenium.WebDriver.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Selenium.WebDriver.Extensions.Core">
+      <HintPath>..\packages\Selenium.WebDriver.Extensions.Core.1.5.457\lib\net45\Selenium.WebDriver.Extensions.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Selenium.WebDriver.Extensions.JQuery">
+      <HintPath>..\packages\Selenium.WebDriver.Extensions.JQuery.1.5.457\lib\net45\Selenium.WebDriver.Extensions.JQuery.dll</HintPath>
+    </Reference>
+    <Reference Include="Selenium.WebDriver.Extensions.QuerySelector">
+      <HintPath>..\packages\Selenium.WebDriver.Extensions.QuerySelector.1.1.166\lib\net45\Selenium.WebDriver.Extensions.QuerySelector.dll</HintPath>
+    </Reference>
+    <Reference Include="Selenium.WebDriver.Extensions.Shared">
+      <HintPath>..\packages\Selenium.WebDriver.Extensions.Shared.1.1.166\lib\net45\Selenium.WebDriver.Extensions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Selenium.WebDriver.Extensions.Sizzle">
+      <HintPath>..\packages\Selenium.WebDriver.Extensions.Sizzle.1.5.457\lib\net45\Selenium.WebDriver.Extensions.Sizzle.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebDriver">
+      <HintPath>..\packages\Selenium.WebDriver.2.45.0\lib\net40\WebDriver.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver.Support">
+      <HintPath>..\packages\Selenium.Support.2.45.0\lib\net40\WebDriver.Support.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AcessoSelenium.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SantanderSite.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\packages\Selenium.WebDriver.ChromeDriver.2.15.0.0\driver\chromedriver.exe">
+      <Link>chromedriver.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AEGF.Dominio\AEGF.Dominio.csproj">
+      <Project>{5AACC824-6E68-4FB9-BCEE-D6DF5E66265A}</Project>
+      <Name>AEGF.Dominio</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

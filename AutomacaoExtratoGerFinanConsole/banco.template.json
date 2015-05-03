@@ -1,0 +1,19 @@
+﻿[
+    {
+        "id": "1",
+        "descricao": "SantanderSite",
+        "nomeAcesso": "SantanderSite",
+        "configuracoes": [
+            {
+                "id": "1",
+                "nome": "CPF",
+                "valor": "12345678901"
+            },
+            {
+                "id": "1",
+                "nome": "Senha",
+                "valor":  "123456"
+            }
+        ]
+    }
+]
