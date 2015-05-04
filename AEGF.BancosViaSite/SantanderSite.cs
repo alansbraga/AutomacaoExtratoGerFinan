@@ -40,31 +40,27 @@ namespace AEGF.BancosViaSite
         {
             VaiParaIFramePrinc();
             var trs = driver.FindElements(By.CssSelector("table.lista tr.trClaro"));
-            if (trs.Count > _cartaoAtual)
+            if (_cartaoAtual > (trs.Count - 1))
                 return false;
 
             var linha = trs[_cartaoAtual];
-            var link = linha.FindElement(By.XPath("//*td[2]/a"));
+            var colunas = linha.FindElements(By.TagName("td"));
+
+            var link = colunas[1].FindElement(By.TagName("a"));
             link.Click();
 
             VaiParaIFramePrinc();
-            // todo guardar parte da referencia aqui
-            /*
-             * 	detalhes = iframePrinc.find("div.caixa td.bold");
-	if (detalhes.length <= 0 )
-		return;
-		
-	retorno.bandeira = detalhes[0].innerText;
-	retorno.conta = detalhes[2].innerText;
 
-             */
+            var tds = driver.FindElements(By.CssSelector("div.caixa td.bold"));
+            var conta = tds[2].Text;
+            conta = conta.Replace("XXXX XXXX XXXX", "Final");
+            var descricao = String.Format("{0} - {1}", tds[0].Text, conta);
 
             TrocaFrameId("iDetalhes");
 
 
             var extrato = CriaRetorno("#detfatura tr.trClaro", true, 0, 1, 2);
-            extrato.Referencia = "30Dias";
-            extrato.Descricao = "Conta Corrente";
+            extrato.Descricao = descricao;
             _extratos.Add(extrato);
 
             return true;
@@ -74,6 +70,7 @@ namespace AEGF.BancosViaSite
         {
             VaiParaMenu();
             ClicaXPath("//*[@id=\"3975Link\"]");
+            driver.SwitchTo().DefaultContent();
             VaiParaCorpo();
             ClicaXPath("//*[@id=\"montaMenu\"]/ul/li[1]/ul/li[2]/a");
         }
@@ -112,7 +109,7 @@ namespace AEGF.BancosViaSite
 
             if (retorno.CartaoCredito)
             {
-                retorno.Referencia = driver.FindElement(By.XPath("table.transacao strong")).Text;
+                retorno.Referencia = driver.FindElement(By.CssSelector("table.transacao strong")).Text;
             }
 
             return retorno;
@@ -183,6 +180,7 @@ namespace AEGF.BancosViaSite
             {
                 try
                 {
+                    webDriver.SwitchTo().DefaultContent();
                     return webDriver.FindElement(By.Id("frmSet")) != null;
                 }
                 catch (Exception)
