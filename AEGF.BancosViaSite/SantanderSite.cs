@@ -54,6 +54,8 @@ namespace AEGF.BancosViaSite
             do
             {
                 VaiParaIFramePrinc();
+                FechaPostIt();
+                
 
                 var tds = driver.FindElements(By.CssSelector("div.caixa td.bold"));
                 var conta = tds[2].Text;
@@ -82,6 +84,11 @@ namespace AEGF.BancosViaSite
                 }
             } while (segunda);
             return true;
+        }
+
+        private void FechaPostIt()
+        {
+            ClicaXPath("//*[@id=\"divPostIt\"]/table/tbody/tr[1]/td/a/img");
         }
 
         private void ClicaFatura()
@@ -219,7 +226,7 @@ namespace AEGF.BancosViaSite
         private void Inicio()
         {
             _extratos = new List<Extrato>();
-            _cartaoAtual = 0;
+            _cartaoAtual = -1;
         }
 
         public string NomeUnico()
