@@ -39,5 +39,10 @@ namespace AEGF.Dominio
             };
             _configuracoes.Add(cfg);
         }
+
+        public string LerConfiguracao(string nome)
+        {
+            return Configuracoes.Single(configuracao => configuracao.Nome == nome).Valor;
+        }
     }
 }

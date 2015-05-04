@@ -14,7 +14,11 @@ namespace AutomacaoExtratoGerFinanConsole
         {
             foreach (var extrato in extratos)
             {
-                Console.WriteLine(extrato);
+                foreach (var transacao in extrato.Transacoes)
+                {
+                    Console.WriteLine(transacao);
+                }
+                
             }
 
             Console.WriteLine("Fim do Extrato. Aperte enter");

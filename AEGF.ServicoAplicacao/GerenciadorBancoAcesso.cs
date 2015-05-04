@@ -17,6 +17,7 @@ namespace AEGF.ServicoAplicacao
         public IBancoAcesso CriaBancoAcesso(Banco banco)
         {
             var bancoAcesso = _bancos[banco.NomeAcesso];
+            bancoAcesso.Iniciar(banco);
             return bancoAcesso;
         }
 

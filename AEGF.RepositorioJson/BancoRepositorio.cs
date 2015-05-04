@@ -16,6 +16,13 @@ namespace AEGF.RepositorioJson
         {
             var nomeArquivo = "banco.json";
             var doArquivo = JsonConvert.DeserializeObject<IEnumerable<BancoLocal>>(File.ReadAllText(nomeArquivo));
+            foreach (var bancoLocal in doArquivo)
+            {
+                foreach (var configuracao in bancoLocal.Configuracoes)
+                {
+                    bancoLocal.AdicionaConfiguracao(configuracao.Nome, configuracao.Valor);
+                }
+            }
             return doArquivo;
         }
     }
