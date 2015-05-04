@@ -24,6 +24,7 @@ namespace AEGF.BancosViaSite
             FazerLogin();
             LerExtrato();
             LerCartoes();
+            FecharBrowser();
             return _extratos;
         }
 
@@ -49,20 +50,37 @@ namespace AEGF.BancosViaSite
             var link = colunas[1].FindElement(By.TagName("a"));
             link.Click();
 
-            VaiParaIFramePrinc();
+            var segunda = false;
+            do
+            {
+                VaiParaIFramePrinc();
 
-            var tds = driver.FindElements(By.CssSelector("div.caixa td.bold"));
-            var conta = tds[2].Text;
-            conta = conta.Replace("XXXX XXXX XXXX", "Final");
-            var descricao = String.Format("{0} - {1}", tds[0].Text, conta);
+                var tds = driver.FindElements(By.CssSelector("div.caixa td.bold"));
+                var conta = tds[2].Text;
+                conta = conta.Replace("XXXX XXXX XXXX", "Final");
+                var descricao = String.Format("{0} - {1}", tds[0].Text, conta);
 
-            TrocaFrameId("iDetalhes");
+                TrocaFrameId("iDetalhes");
 
 
-            var extrato = CriaRetorno("#detfatura tr.trClaro", true, 0, 1, 2);
-            extrato.Descricao = descricao;
-            _extratos.Add(extrato);
+                var extrato = CriaRetorno("#detfatura tr.trClaro", true, 0, 1, 2);
+                extrato.Descricao = descricao;
+                _extratos.Add(extrato);
 
+                if (!segunda)
+                {
+                    VaiParaIFramePrinc();
+                    SelecionaIndexXPath("//*[@id=\"cboFatura\"]", 2);
+                    ClicaXPath("//*[@id=\"frmFatura\"]/div[7]/fieldset/a");
+                    
+                    
+                    segunda = true;
+                }
+                else
+                {
+                    segunda = false;
+                }
+            } while (segunda);
             return true;
         }
 

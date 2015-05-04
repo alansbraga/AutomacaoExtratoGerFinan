@@ -20,6 +20,10 @@ namespace AEGF.BancosViaSite
             
         }
 
+        protected void FecharBrowser()
+        {
+            driver.Quit();
+        }
 
         protected void TrocaFrame(By seletor)
         {
@@ -74,6 +78,12 @@ namespace AEGF.BancosViaSite
         {
             var dropdown = new SelectElement(driver.FindElement(By.XPath(xPath)));
             dropdown.SelectByValue(valor);
+        }
+
+        protected void SelecionaIndexXPath(string xPath, int valor)
+        {
+            var dropdown = new SelectElement(driver.FindElement(By.XPath(xPath)));
+            dropdown.SelectByIndex(valor);
         }
 
         protected abstract string URLSite();

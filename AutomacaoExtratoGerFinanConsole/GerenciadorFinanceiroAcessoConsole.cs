@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
+using Newtonsoft.Json;
 
 namespace AutomacaoExtratoGerFinanConsole
 {
@@ -20,6 +22,9 @@ namespace AutomacaoExtratoGerFinanConsole
                 }
                 
             }
+
+            File.WriteAllText(@"c:\tmp\extratos.json", JsonConvert.SerializeObject(extratos));
+            
 
             Console.WriteLine("Fim do Extrato. Aperte enter");
             Console.ReadLine();
