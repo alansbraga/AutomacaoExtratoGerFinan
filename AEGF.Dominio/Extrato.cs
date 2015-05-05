@@ -15,7 +15,7 @@ namespace AEGF.Dominio
             _transacoes = new List<Transacao>();
         }
         public virtual bool CartaoCredito { get; set; }
-        public virtual string Referencia { get; set; }
+        public virtual DateTime Referencia { get; set; }
         public virtual string Descricao { get; set; }
 
         public virtual IEnumerable<Transacao> Transacoes

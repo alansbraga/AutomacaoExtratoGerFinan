@@ -120,7 +120,7 @@ namespace AEGF.BancosViaSite
             VaiParaIFramePrinc();
             TrocaFrameXPath("//*[@id=\"extrato\"]");
             var extrato = CriaRetorno("table.lista tr.trClaro", false, 0, 2, 5);
-            extrato.Referencia = "30Dias";
+            extrato.Referencia = DateTime.Today;
             extrato.Descricao = "Conta Corrente";
             _extratos.Add(extrato);
 
@@ -137,7 +137,7 @@ namespace AEGF.BancosViaSite
             {
                 try
                 {
-                    retorno.Referencia = driver.FindElement(By.CssSelector("table.transacao strong")).Text;
+                    retorno.Referencia = DateTime.Parse(driver.FindElement(By.CssSelector("table.transacao strong")).Text);
                 }
                 catch(Exception)
                 {
