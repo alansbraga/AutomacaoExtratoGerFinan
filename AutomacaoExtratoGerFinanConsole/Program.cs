@@ -15,7 +15,7 @@ namespace AutomacaoExtratoGerFinanConsole
         static void Main(string[] args)
         {
             var repositorio = new BancoRepositorio();
-            var gerenciadorFinanceiro= new GerenciadorFinanceiroAcessoConsole();
+            var gerenciadorFinanceiro = new GerenciadorFinanceiroAcessoConsole();
 
 
             var gerenciadorBanco = new GerenciadorBancoAcesso();

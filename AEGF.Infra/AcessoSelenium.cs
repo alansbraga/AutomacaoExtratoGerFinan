@@ -7,7 +7,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 
-namespace AEGF.BancosViaSite
+namespace AEGF.Infra
 {
     public abstract class AcessoSelenium
     {

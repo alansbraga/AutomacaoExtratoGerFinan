@@ -69,6 +69,10 @@
       <Project>{5AACC824-6E68-4FB9-BCEE-D6DF5E66265A}</Project>
       <Name>AEGF.Dominio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AEGF.Infra\AEGF.Infra.csproj">
+      <Project>{f1005ca5-8ffd-4d13-9eb3-4ec485513a9a}</Project>
+      <Name>AEGF.Infra</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AEGF.RepositorioJson\AEGF.RepositorioJson.csproj">
       <Project>{ADF5115C-8D76-481D-A5C1-50A34961470A}</Project>
       <Name>AEGF.RepositorioJson</Name>

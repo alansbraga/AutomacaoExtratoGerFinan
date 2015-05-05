@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
+using AEGF.Infra;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
