@@ -134,7 +134,15 @@ namespace AEGF.BancosViaSite
 
             if (retorno.CartaoCredito)
             {
-                retorno.Referencia = driver.FindElement(By.CssSelector("table.transacao strong")).Text;
+                try
+                {
+                    retorno.Referencia = driver.FindElement(By.CssSelector("table.transacao strong")).Text;
+                }
+                catch(Exception)
+                {
+                    // quando não há movimentos
+                }
+                
             }
 
             return retorno;
