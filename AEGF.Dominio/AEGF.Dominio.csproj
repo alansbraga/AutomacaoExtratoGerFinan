@@ -42,8 +42,12 @@
     <Compile Include="Banco.cs" />
     <Compile Include="BancoConfiguracao.cs" />
     <Compile Include="Extrato.cs" />
+    <Compile Include="GerenciadorFinanceiro.cs" />
+    <Compile Include="GerenciadorFinanceiroConfiguracao.cs" />
+    <Compile Include="GerenciadorFinanceiroContas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\IBancoRepositorio.cs" />
+    <Compile Include="Repositorios\IGerenciadorFinanceiroRepositorio.cs" />
     <Compile Include="Servicos\IBancoAcesso.cs" />
     <Compile Include="Servicos\IGerenciadorFinanceiroAcesso.cs" />
     <Compile Include="Transacao.cs" />

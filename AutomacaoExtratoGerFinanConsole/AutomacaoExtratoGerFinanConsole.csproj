@@ -58,6 +58,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="banco.template.json" />
+    <None Include="gerenciador.template.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +69,10 @@
     <ProjectReference Include="..\AEGF.Dominio\AEGF.Dominio.csproj">
       <Project>{5AACC824-6E68-4FB9-BCEE-D6DF5E66265A}</Project>
       <Name>AEGF.Dominio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AEGF.GFViaSite\AEGF.GFViaSite.csproj">
+      <Project>{7C2A61FD-4825-4BA4-AE07-D8469F2136CF}</Project>
+      <Name>AEGF.GFViaSite</Name>
     </ProjectReference>
     <ProjectReference Include="..\AEGF.Infra\AEGF.Infra.csproj">
       <Project>{f1005ca5-8ffd-4d13-9eb3-4ec485513a9a}</Project>

@@ -9,5 +9,8 @@ namespace AEGF.Dominio.Servicos
     public interface IGerenciadorFinanceiroAcesso
     {
         void ProcessarContas(IEnumerable<Extrato> extratos);
+        string NomeUnico();
+        void Iniciar(GerenciadorFinanceiro gerenciador);
+
     }
 }

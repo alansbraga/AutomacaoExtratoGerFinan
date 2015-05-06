@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{230733
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AEGF.Infra", "AEGF.Infra\AEGF.Infra.csproj", "{F1005CA5-8FFD-4D13-9EB3-4EC485513A9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AEGF.GFViaSite", "AEGF.GFViaSite\AEGF.GFViaSite.csproj", "{7C2A61FD-4825-4BA4-AE07-D8469F2136CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{F1005CA5-8FFD-4D13-9EB3-4EC485513A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1005CA5-8FFD-4D13-9EB3-4EC485513A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1005CA5-8FFD-4D13-9EB3-4EC485513A9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C2A61FD-4825-4BA4-AE07-D8469F2136CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C2A61FD-4825-4BA4-AE07-D8469F2136CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C2A61FD-4825-4BA4-AE07-D8469F2136CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C2A61FD-4825-4BA4-AE07-D8469F2136CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

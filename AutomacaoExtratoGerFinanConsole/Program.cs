@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AEGF.BancosViaSite;
+using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
+using AEGF.GFViaSite;
 using AEGF.RepositorioJson;
 using AEGF.ServicoAplicacao;
 
@@ -15,7 +17,11 @@ namespace AutomacaoExtratoGerFinanConsole
         static void Main(string[] args)
         {
             var repositorio = new BancoRepositorio();
-            var gerenciadorFinanceiro = new GerenciadorFinanceiroAcessoConsole();
+            var repositorioGF = new GerenciadorFinanceiroRepositorio();
+
+            var gerenciador = repositorioGF.ObterTodos().First();
+            var gerenciadorFinanceiro = new MinhasEconomiasViaSite();
+            //var gerenciadorFinanceiro = new GerenciadorFinanceiroAcessoConsole();
 
 
             var gerenciadorBanco = new GerenciadorBancoAcesso();

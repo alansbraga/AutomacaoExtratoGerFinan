@@ -57,6 +57,11 @@ namespace AEGF.Infra
             DigitaTexto(By.Id(id), valor);
         }
 
+        protected void DigitaTextoXPath(string xPath, string valor)
+        {
+            DigitaTexto(By.Id(xPath), valor);
+        }
+
         protected void Clica(By seletor)
         {
             var query = driver.FindElement(seletor);

@@ -1,0 +1,32 @@
+﻿[
+    {
+        "Descricao": "MinhasEconomiasSite",
+        "Nome": "MinhasEconomiasSite",
+        "Configuracoes": [
+            {
+                "Nome": "email",
+                "Valor": "seuemail@servidor.com"
+            },
+            {
+                "Nome": "senha",
+                "Valor": "123456"
+            }
+        ],
+        "Contas": [
+            {
+                "ContaOrigem": "nome da conta do banco 1",
+                "ContaDestino": "nome da conta no minhas economias 1",
+                "IgnorarPositivos": true,
+                "MudaDataParaMesReferencia": true,
+                "MultiplicarMenosUm":  true
+            },
+            {
+                "ContaOrigem": "nome da conta do banco 2",
+                "ContaDestino": "nome da conta no minhas economias 2",
+                "IgnorarPositivos": true,
+                "MudaDataParaMesReferencia": true,
+                "MultiplicarMenosUm":  true
+            }
+        ]
+    }
+]

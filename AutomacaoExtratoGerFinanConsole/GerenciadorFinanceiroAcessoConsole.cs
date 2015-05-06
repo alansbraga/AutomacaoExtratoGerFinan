@@ -13,6 +13,8 @@ namespace AutomacaoExtratoGerFinanConsole
 {
     public class GerenciadorFinanceiroAcessoConsole: IGerenciadorFinanceiroAcesso
     {
+        private GerenciadorFinanceiro _gerenciador;
+
         public void ProcessarContas(IEnumerable<Extrato> extratos)
         {
             foreach (var extrato in extratos)
@@ -34,6 +36,16 @@ namespace AutomacaoExtratoGerFinanConsole
 
             Console.WriteLine("Fim do Extrato. Aperte enter");
             Console.ReadLine();
+        }
+
+        public string NomeUnico()
+        {
+            return "";
+        }
+
+        public void Iniciar(GerenciadorFinanceiro gerenciador)
+        {
+            _gerenciador = gerenciador;
         }
     }
 }
