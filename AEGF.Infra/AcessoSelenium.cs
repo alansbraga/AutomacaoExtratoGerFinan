@@ -91,6 +91,33 @@ namespace AEGF.Infra
             dropdown.SelectByIndex(valor);
         }
 
+        protected void AguardarId(string id)
+        {
+            Aguardar(By.Id(id));
+        }
+
+        protected void AguardarXPath(string xPath)
+        {
+            Aguardar(By.XPath(xPath));
+        }
+
+        protected void Aguardar(By seletor, int segundos = 10)
+        {
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(segundos));
+            wait.Until(webDriver =>
+            {
+                try
+                {
+                    return webDriver.FindElement(seletor) != null;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            });
+
+        }
+
         protected abstract string URLSite();
 
 

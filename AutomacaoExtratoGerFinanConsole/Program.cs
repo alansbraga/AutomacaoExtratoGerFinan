@@ -21,6 +21,7 @@ namespace AutomacaoExtratoGerFinanConsole
 
             var gerenciador = repositorioGF.ObterTodos().First();
             var gerenciadorFinanceiro = new MinhasEconomiasViaSite();
+            gerenciadorFinanceiro.Iniciar(gerenciador);
             //var gerenciadorFinanceiro = new GerenciadorFinanceiroAcessoConsole();
 
 

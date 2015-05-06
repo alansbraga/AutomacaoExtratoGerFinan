@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
 using AEGF.Infra;
+using OpenQA.Selenium;
 
 namespace AEGF.GFViaSite
 {
@@ -16,11 +17,17 @@ namespace AEGF.GFViaSite
 
         public void ProcessarContas(IEnumerable<Extrato> extratos)
         {
+            IniciarBrowser();
             FazerLogin();
             PosicionarNasTransacoes();
 
             foreach (var extrato in extratos)
             {
+                var contaDestino = _gerenciador.LerConta(extrato.Descricao).ContaDestino;
+
+                if (String.IsNullOrEmpty(contaDestino))
+                    continue;
+
                 var gerador = new GeradorOFX(extrato, new OpcoesOFX()
                 {
                     IgnorarPositivos = extrato.CartaoCredito,
@@ -33,12 +40,23 @@ namespace AEGF.GFViaSite
 
                 ClicarNoImportar();
                 ClicarNoAvancar();
-                SelecionarArquivo(arquivo);
-                SelecionarConta(_gerenciador.LerConta(extrato.Descricao).ContaDestino);
-                ConfirmarArquivo();
+                ArquivoConta(arquivo, contaDestino);
             }
 
 
+        }
+
+        private void ArquivoConta(string arquivo, string contaDestino)
+        {
+            var janelaModal = driver.FindElement(By.CssSelector("div.x-upload-transacoes"));
+
+            var inputFile = janelaModal.FindElement(By.CssSelector("input.x-form-file"));
+            inputFile.SendKeys(arquivo);
+
+            var inputs = janelaModal.FindElements(By.CssSelector("input.x-form-text"));
+            inputs[1].SendKeys(contaDestino);
+            var botao = janelaModal.FindElement(By.XPath("//button[text()='Avançar']"));
+            botao.Click();
         }
 
         public string NomeUnico()
@@ -51,35 +69,23 @@ namespace AEGF.GFViaSite
             _gerenciador = gerenciador;
         }
 
-        private void ConfirmarArquivo()
-        {
-            ClicaXPath("//*[@id=\"ext-gen7\"]/div[17]/div[2]/div[1]/div/div/div[2]/div/table/tbody/tr/td[2]/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr[2]/td[2]/em/button");
-        }
-
-        private void SelecionarConta(string contaDestino)
-        {
-            
-            DigitaTextoXPath("//*[@id=\"ext-gen7\"]/div[17]/div[2]/div[1]/div/div/div[1]/div/div/form/div[2]/div[4]/div[1]/div/input[2]", contaDestino);
-        }
-
-        private void SelecionarArquivo(string arquivo)
-        {
-            DigitaTextoXPath("//*[@id=\"ext-gen7\"]/div[17]/div[2]/div[1]/div/div/div[1]/div/div/form/div[2]/div[2]/div[1]/div/input[1]", arquivo);
-        }
-
         private void ClicarNoAvancar()
         {
-            ClicaXPath("//*[@id=\"ext-gen7\"]/div[17]/div[2]/div[1]/div/div/div[2]/div/table/tbody/tr/td[2]/table/tbody/tr/td[1]/table/tbody/tr/td/table/tbody/tr[2]/td[2]/em/button");
+            ClicaXPath("//button[text()='Avançar']");
         }
 
         private void ClicarNoImportar()
         {
-            ClicaId("ext-gen703");
+            const string id = "ext-gen703";
+            AguardarId(id);
+            ClicaId(id);
         }
 
         private void PosicionarNasTransacoes()
         {
-            ClicaId("ext-gen418");
+            const string id = "ext-gen418";
+            AguardarId(id);
+            ClicaId(id);
         }
 
         private void FazerLogin()

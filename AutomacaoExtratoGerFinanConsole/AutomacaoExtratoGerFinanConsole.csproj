@@ -58,6 +58,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="banco.template.json" />
+    <None Include="gerenciador.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="gerenciador.template.json" />
     <None Include="packages.config" />
   </ItemGroup>
