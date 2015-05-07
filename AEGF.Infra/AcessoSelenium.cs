@@ -73,6 +73,12 @@ namespace AEGF.Infra
             Clica(By.Id(id));
         }
 
+        protected void ClicaCSS(string css)
+        {
+            Clica(By.CssSelector(css));
+        }
+
+
         protected void ClicaXPath(string xPath)
         {
             Clica(By.XPath(xPath));
@@ -100,6 +106,12 @@ namespace AEGF.Infra
         {
             Aguardar(By.XPath(xPath));
         }
+
+        protected void AguardarCSS(string css)
+        {
+            Aguardar(By.CssSelector(css));
+        }
+
 
         protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 10)
         {

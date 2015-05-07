@@ -47,12 +47,31 @@ namespace AEGF.GFViaSite
                 ClicarNoImportar();
                 ClicarNoAvancar();
                 ArquivoConta(arquivo, contaDestino);
+                ConfirmarImportacao();
 
                 File.Delete(arquivo);
             }
 
-
+            FecharBrowser();
         }
+
+        private void ConfirmarImportacao()
+        {
+            // todo Ser opcional
+            var css = "div.async-body a";
+            AguardarCSS(css);
+            ClicaCSS(css);
+
+            var id = "importacaoPreview";
+            AguardarId(id);
+            ClicaCSS("#importacaoPreview button");
+
+            AguardarCSS(css); // aguardando o link "Aqui"
+            css = "div.x-tool-close";
+            ClicaCSS(css);
+            
+        }
+
 
         private void ArquivoConta(string arquivo, string contaDestino)
         {

@@ -7,4 +7,8 @@ A ideia é fazer um programa que acesse de alguma forma os extratos dos bancos e
 - Santander via Selenium
 
 ### Gereneciadores Financeiros implementados
-- Arquivo OFX de teste
+- Minhas Economias via Selenium
+
+### Configurações
+- É necessário salvar os arquivos banco.template.json e gerenciador.template.json como banco.json e gerenciador.json na mesma pasta que eles se encontram.
+- Após isso edite os arquivos seguindo o modelo apresentado.
