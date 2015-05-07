@@ -17,7 +17,7 @@ namespace AEGF.Infra
             //IWebDriver driver = new FirefoxDriver();
             driver = new ChromeDriver();
             driver.Navigate().GoToUrl(URLSite());
-            
+            driver.Manage().Window.Maximize();
         }
 
         protected void FecharBrowser()
@@ -64,7 +64,7 @@ namespace AEGF.Infra
 
         protected void Clica(By seletor)
         {
-            var query = driver.FindElement(seletor);
+            var query = driver.FindElement(seletor);            
             query.Click();
 
         }
@@ -101,14 +101,20 @@ namespace AEGF.Infra
             Aguardar(By.XPath(xPath));
         }
 
-        protected void Aguardar(By seletor, int segundos = 10)
+        protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 10)
         {
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(segundos));
+            
             wait.Until(webDriver =>
             {
                 try
                 {
-                    return webDriver.FindElement(seletor) != null;
+                    var element = webDriver.FindElement(seletor);
+                    var retorno = element != null;
+                    if (garantirHabilitado)
+                        retorno = retorno && element.Displayed && element.Enabled;
+                    return retorno;
+
                 }
                 catch (Exception)
                 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
@@ -23,7 +24,12 @@ namespace AEGF.GFViaSite
 
             foreach (var extrato in extratos)
             {
-                var contaDestino = _gerenciador.LerConta(extrato.Descricao).ContaDestino;
+                var conta = _gerenciador.LerConta(extrato.Descricao);
+
+                if (conta == null)
+                    continue;
+
+                var contaDestino = conta.ContaDestino;
 
                 if (String.IsNullOrEmpty(contaDestino))
                     continue;
@@ -41,6 +47,8 @@ namespace AEGF.GFViaSite
                 ClicarNoImportar();
                 ClicarNoAvancar();
                 ArquivoConta(arquivo, contaDestino);
+
+                File.Delete(arquivo);
             }
 
 
@@ -56,6 +64,7 @@ namespace AEGF.GFViaSite
             var inputs = janelaModal.FindElements(By.CssSelector("input.x-form-text"));
             inputs[1].SendKeys(contaDestino);
             var botao = janelaModal.FindElement(By.XPath("//button[text()='Avançar']"));
+            janelaModal.Click();
             botao.Click();
         }
 
@@ -77,7 +86,7 @@ namespace AEGF.GFViaSite
         private void ClicarNoImportar()
         {
             const string id = "ext-gen703";
-            AguardarId(id);
+            AguardarId(id);            
             ClicaId(id);
         }
 
@@ -85,7 +94,17 @@ namespace AEGF.GFViaSite
         {
             const string id = "ext-gen418";
             AguardarId(id);
-            ClicaId(id);
+            try
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 5));
+                ClicaId(id);
+            }
+            catch
+            {
+                Thread.Sleep(new TimeSpan(0, 0, 10));
+                ClicaId(id);
+            }
+            
         }
 
         private void FazerLogin()

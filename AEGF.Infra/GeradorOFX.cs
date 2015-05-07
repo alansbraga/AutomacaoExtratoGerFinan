@@ -69,7 +69,7 @@ namespace AEGF.Infra
                 {
                     data = _extrato.Referencia;
                     data = new DateTime(data.Year, data.Month, 1);
-                    sDescricao = sDescricao + " -- Dt.Mov: " + item.Data;
+                    sDescricao = sDescricao + " -- Dt.Mov: " + item.Data.ToString("d");
                 }
 
                 sDescricao = sDescricao.Replace('&', 'e');

@@ -66,7 +66,7 @@ namespace AEGF.Dominio
 
         public GerenciadorFinanceiroContas LerConta(string contaOrigem)
         {
-            return Contas.Single(conta => conta.ContaOrigem == contaOrigem);
+            return Contas.SingleOrDefault(conta => conta.ContaOrigem == contaOrigem);
         }
 
 
