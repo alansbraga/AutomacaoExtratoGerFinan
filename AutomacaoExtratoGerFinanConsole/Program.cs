@@ -27,6 +27,7 @@ namespace AutomacaoExtratoGerFinanConsole
 
             var gerenciadorBanco = new GerenciadorBancoAcesso();
             gerenciadorBanco.AdicionaBancoAcesso(new SantanderSite());
+            gerenciadorBanco.AdicionaBancoAcesso(new CEFSite());
 
             var integrador = new IntegrarServicoAplicacao(repositorio, gerenciadorFinanceiro, gerenciadorBanco);
             integrador.IntegrarContas();

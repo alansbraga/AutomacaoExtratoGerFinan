@@ -5,7 +5,11 @@ A ideia é fazer um programa que acesse de alguma forma os extratos dos bancos e
 
 ### Bancos Implementados
 - Santander via Selenium
-
+ - Uma conta corrente
+ - Todos os cartões de crédito
+- CEF via Selenium utilizando Mozilla Firefox
+ - Somente conta corrente 
+ 
 ### Gereneciadores Financeiros implementados
 - Minhas Economias via Selenium
 

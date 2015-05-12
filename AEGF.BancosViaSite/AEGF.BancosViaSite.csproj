@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CEFSite.cs" />
     <Compile Include="SantanderSite.cs" />
   </ItemGroup>
   <ItemGroup>

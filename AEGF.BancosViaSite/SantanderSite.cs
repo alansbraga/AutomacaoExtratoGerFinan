@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
@@ -117,13 +118,23 @@ namespace AEGF.BancosViaSite
 
         private void LerTabelaExtrato()
         {
+            var numeroConta = BuscaNumeroConta();
+
             VaiParaIFramePrinc();
             TrocaFrameXPath("//*[@id=\"extrato\"]");
             var extrato = CriaRetorno("table.lista tr.trClaro", false, 0, 2, 5);
             extrato.Referencia = DateTime.Today;
-            extrato.Descricao = "Conta Corrente";
+            extrato.Descricao = "Conta Corrente " + numeroConta;
             _extratos.Add(extrato);
 
+        }
+
+        private string BuscaNumeroConta()
+        {
+            VaiParaCorpo();
+            var numeroConta = driver.FindElement(By.XPath("//*[@id=\"ola\"]/table/tbody/tr/td[2]")).Text;
+            numeroConta = new Regex("Conta: +([0-9.]+)").Match(numeroConta).Groups[1].Value;
+            return numeroConta;
         }
 
         private Extrato CriaRetorno(string cssPath, bool tipoCartao, int colData, int colDescricao, int colValor)

@@ -13,11 +13,16 @@ namespace AEGF.Infra
     {
         protected void IniciarBrowser()
         {
-            // todo configurar o browser
-            //IWebDriver driver = new FirefoxDriver();
-            driver = new ChromeDriver();
+            driver = CriarBrowser();
             driver.Navigate().GoToUrl(URLSite());
             driver.Manage().Window.Maximize();
+        }
+
+        protected virtual IWebDriver CriarBrowser()
+        {
+            // todo configurar o browser
+            //IWebDriver driver = new FirefoxDriver();
+            return new ChromeDriver();
         }
 
         protected void FecharBrowser()
