@@ -53,7 +53,7 @@ namespace AEGF.BancosViaSite
 
         private void LerTabelaExtrato(DateTime referencia)
         {
-
+            AguardarCSS("table.movimentacao");
             var extrato = CriaRetorno("table.movimentacao tr", false, 0, 2, 3);
             extrato.Referencia = referencia;
             extrato.Descricao = String.Format("Conta Corrente - {0}", referencia.ToString("yy-MM"));
@@ -84,11 +84,15 @@ namespace AEGF.BancosViaSite
 
                 var colunas = linha.FindElements(By.TagName("td"));
 
-                var valorStr = colunas[colValor].Text.Split(' ')[0];
+                var colunaValor = colunas[colValor].Text.Split(' ');
+                var valorStr = colunaValor[0];
                 double valor;
 
                 if (Double.TryParse(valorStr, out valor))
                 {
+                    if (colunaValor[1] == "D")
+                        valor *= -1;
+
                     var item = new Transacao()
                     {
                         Valor = valor,
@@ -104,6 +108,11 @@ namespace AEGF.BancosViaSite
 
         private void SelecionaMesAtual()
         {
+            ConfirmaMesExtrato();
+        }
+
+        private void ConfirmaMesExtrato()
+        {
             const string id = "confirma";
             AguardarId(id);
             ClicaId(id);
@@ -114,9 +123,9 @@ namespace AEGF.BancosViaSite
             const string id = "rdoTipoExtratoOutro";
             AguardarId(id);
             ClicaId(id);
-            //ClicaXPath("//*[@id=\"dk_container_sltOutroMes\"]/a");
-            SelecionaValorXPath("//*[@id=\"sltOutroMes\"]", "1");
-            //ClicaXPath("//*[@id=\"dk_container_sltOutroMes\"]/div[2]/ul[1]/li[2]/a");
+            ClicaXPath("//*[@id=\"dk_container_sltOutroMes\"]/a");
+            ClicaXPath("//*[@id=\"dk_container_sltOutroMes\"]/div/ul/li[2]/a");
+            ConfirmaMesExtrato();
         }
 
         private void FazerLogin()
