@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AEGF.Dominio.Repositorios
+namespace AEGF.Dominio
 {
-    public interface IBancoRepositorio: IRepositorioBase<Banco>
+    public interface IUnidadeTrabalho
     {
+        void Gravar();
+        void Cancelar();
     }
 }

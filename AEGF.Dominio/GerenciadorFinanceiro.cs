@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace AEGF.Dominio
 {
-    public class GerenciadorFinanceiro
+    public class GerenciadorFinanceiro: Entidade
     {
         private List<GerenciadorFinanceiroConfiguracao> _configuracoes;
         private List<GerenciadorFinanceiroContas> _contas;
-        public virtual int Id { get; set; }
         public virtual string Descricao { get; set; }
         public virtual string Nome { get; set; }
 

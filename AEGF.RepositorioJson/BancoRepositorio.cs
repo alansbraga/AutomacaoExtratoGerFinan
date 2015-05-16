@@ -10,20 +10,26 @@ using Newtonsoft.Json;
 
 namespace AEGF.RepositorioJson
 {
-    public class BancoRepositorio: IBancoRepositorio
+    public class BancoRepositorio : RepositorioBase<Banco>, IBancoRepositorio
     {
-        public IEnumerable<Banco> ObterBancos()
+        public BancoRepositorio(IUnidadeTrabalhoJson unidadeTrabalho) : base(unidadeTrabalho)
         {
-            var nomeArquivo = "banco.json";
-            var doArquivo = JsonConvert.DeserializeObject<IEnumerable<BancoLocal>>(File.ReadAllText(nomeArquivo));
-            foreach (var bancoLocal in doArquivo)
-            {
-                foreach (var configuracao in bancoLocal.Configuracoes)
-                {
-                    bancoLocal.AdicionaConfiguracao(configuracao.Nome, configuracao.Valor);
-                }
-            }
-            return doArquivo;
+
         }
+
+        protected override string DefineNomeArquivo()
+        {
+            return "banco.json";
+        }
+
+        protected override void AntesAdicionar(Banco entidade)
+        {
+            
+        }
+
+        protected override void ProcessarPosCarregamento(IEnumerable<Banco> doArquivo)
+        {
+        }
+
     }
 }

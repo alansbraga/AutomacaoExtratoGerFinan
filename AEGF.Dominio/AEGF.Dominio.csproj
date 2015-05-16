@@ -41,15 +41,20 @@
   <ItemGroup>
     <Compile Include="Banco.cs" />
     <Compile Include="BancoConfiguracao.cs" />
+    <Compile Include="Entidade.cs" />
     <Compile Include="Extrato.cs" />
     <Compile Include="GerenciadorFinanceiro.cs" />
     <Compile Include="GerenciadorFinanceiroConfiguracao.cs" />
     <Compile Include="GerenciadorFinanceiroContas.cs" />
+    <Compile Include="IUnidadeTrabalho.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\IBancoRepositorio.cs" />
+    <Compile Include="Repositorios\IExtratoRepositorio.cs" />
     <Compile Include="Repositorios\IGerenciadorFinanceiroRepositorio.cs" />
+    <Compile Include="Repositorios\IRepositorioBase.cs" />
     <Compile Include="Servicos\IBancoAcesso.cs" />
     <Compile Include="Servicos\IGerenciadorFinanceiroAcesso.cs" />
+    <Compile Include="Servicos\IResumoFinal.cs" />
     <Compile Include="Transacao.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

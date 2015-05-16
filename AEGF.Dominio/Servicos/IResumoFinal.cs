@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AEGF.Dominio.Repositorios
+namespace AEGF.Dominio.Servicos
 {
-    public interface IBancoRepositorio: IRepositorioBase<Banco>
+    interface IResumoFinal
     {
+        void CriarResumo(IEnumerable<Extrato> extratos);
     }
 }

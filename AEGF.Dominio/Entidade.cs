@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AEGF.Dominio.Repositorios
+namespace AEGF.Dominio
 {
-    public interface IBancoRepositorio: IRepositorioBase<Banco>
+    public class Entidade
     {
+        public virtual int Id { get; set; }
     }
 }

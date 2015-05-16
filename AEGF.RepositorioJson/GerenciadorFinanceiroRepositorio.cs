@@ -10,24 +10,27 @@ using Newtonsoft.Json;
 
 namespace AEGF.RepositorioJson
 {
-    public class GerenciadorFinanceiroRepositorio: IGerenciadorFinanceiroRepositorio
+    public class GerenciadorFinanceiroRepositorio : RepositorioBase<GerenciadorFinanceiro>, IGerenciadorFinanceiroRepositorio
     {
-        public IEnumerable<GerenciadorFinanceiro> ObterTodos()
+        public GerenciadorFinanceiroRepositorio(IUnidadeTrabalhoJson unidadeTrabalho): base(unidadeTrabalho)
         {
-            var nomeArquivo = "gerenciador.json";
-            var doArquivo = JsonConvert.DeserializeObject<IEnumerable<GerenciadorLocal>>(File.ReadAllText(nomeArquivo));
-            foreach (var gerenciadorLocal in doArquivo)
-            {
-                foreach (var configuracao in gerenciadorLocal.Configuracoes)
-                {
-                    gerenciadorLocal.AdicionaConfiguracao(configuracao.Nome, configuracao.Valor);
-                }
-                foreach (var conta in gerenciadorLocal.Contas)
-                {
-                    gerenciadorLocal.AdicionaConta(conta);
-                }
-            }
-            return doArquivo;
+
         }
+
+       
+        protected override void AntesAdicionar(GerenciadorFinanceiro entidade)
+        {
+            
+        }
+
+        protected override string DefineNomeArquivo()
+        {
+            return "gerenciador.json";
+        }
+
+        protected override void ProcessarPosCarregamento(IEnumerable<GerenciadorFinanceiro> doArquivo)
+        {
+        }
+
     }
 }

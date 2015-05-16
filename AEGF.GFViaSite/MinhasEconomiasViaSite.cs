@@ -34,7 +34,7 @@ namespace AEGF.GFViaSite
                 if (String.IsNullOrEmpty(contaDestino))
                     continue;
 
-                var gerador = new GeradorOFX(extrato, new OpcoesOFX()
+                var gerador = new GeradorOFX(extrato, new OpcoesOFX
                 {
                     IgnorarPositivos = extrato.CartaoCredito,
                     MudaDataParaMesReferencia = extrato.CartaoCredito,
@@ -118,12 +118,12 @@ namespace AEGF.GFViaSite
                 Thread.Sleep(new TimeSpan(0, 0, 5));
                 ClicaId(id);
             }
-            catch
+            catch (Exception ex)
             {
                 Thread.Sleep(new TimeSpan(0, 0, 10));
                 ClicaId(id);
             }
-            
+
         }
 
         private void FazerLogin()

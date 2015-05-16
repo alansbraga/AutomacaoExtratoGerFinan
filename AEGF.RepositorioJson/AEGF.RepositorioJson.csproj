@@ -45,11 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BancoLocal.cs" />
     <Compile Include="BancoRepositorio.cs" />
+    <Compile Include="ExtratoRepositorio.cs" />
     <Compile Include="GerenciadorFinanceiroRepositorio.cs" />
-    <Compile Include="GerenciadorLocal.cs" />
+    <Compile Include="IRepositorioJson.cs" />
+    <Compile Include="IUnidadeTrabalhoJson.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositorioBase.cs" />
+    <Compile Include="UnidadeTrabalhoJson.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AEGF.Dominio\AEGF.Dominio.csproj">

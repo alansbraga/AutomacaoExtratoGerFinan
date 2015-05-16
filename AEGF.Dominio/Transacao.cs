@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AEGF.Dominio
 {
-    public class Transacao
+    public class Transacao: Entidade
     {
         public virtual Double Valor { get; set; }
         public virtual DateTime Data { get; set; }

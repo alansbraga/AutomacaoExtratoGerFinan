@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace AEGF.Dominio.Repositorios
 {
-    public interface IBancoRepositorio: IRepositorioBase<Banco>
+    public interface IRepositorioBase<T> where T: Entidade
     {
+        IEnumerable<T> ObterTodos();
+        void Adicionar(T entidade);
     }
 }

@@ -21,7 +21,7 @@ namespace AEGF.ServicoAplicacao
 
         public void IntegrarContas()
         {
-            var bancos = _bancoRepositorio.ObterBancos();
+            var bancos = _bancoRepositorio.ObterTodos();
             var extratos = new List<Extrato>();
             foreach (var banco in bancos)
             {

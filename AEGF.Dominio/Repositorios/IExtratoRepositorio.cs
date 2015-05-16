@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AEGF.Dominio.Repositorios
 {
-    public interface IBancoRepositorio: IRepositorioBase<Banco>
+    public interface IExtratoRepositorio: IRepositorioBase<Extrato>
     {
     }
 }

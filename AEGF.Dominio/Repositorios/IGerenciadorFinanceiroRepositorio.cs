@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace AEGF.Dominio.Repositorios
 {
-    public interface IGerenciadorFinanceiroRepositorio
+    public interface IGerenciadorFinanceiroRepositorio: IRepositorioBase<GerenciadorFinanceiro>
     {
-        IEnumerable<GerenciadorFinanceiro> ObterTodos();
-
     }
 }

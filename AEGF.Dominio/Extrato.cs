@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AEGF.Dominio
 {
-    public class Extrato
+    public class Extrato: Entidade
     {
         private readonly List<Transacao> _transacoes;
 
@@ -17,6 +17,7 @@ namespace AEGF.Dominio
         public virtual bool CartaoCredito { get; set; }
         public virtual DateTime Referencia { get; set; }
         public virtual string Descricao { get; set; }
+        public virtual decimal SaldoAnterior { get; set; }
 
         public virtual IEnumerable<Transacao> Transacoes
         {

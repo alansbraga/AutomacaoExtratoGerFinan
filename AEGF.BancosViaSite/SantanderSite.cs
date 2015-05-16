@@ -171,7 +171,7 @@ namespace AEGF.BancosViaSite
 
                 if (Double.TryParse(valorStr, out valor))
                 {
-                    var item = new Transacao()
+                    var item = new Transacao
                     {
                         Valor = valor,
                         Descricao = colunas[colDescricao].Text,

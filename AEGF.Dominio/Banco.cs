@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AEGF.Dominio
 {
-    public class Banco
+    public class Banco: Entidade
     {
         public Banco()
         {
@@ -14,7 +14,6 @@ namespace AEGF.Dominio
         }
 
         private List<BancoConfiguracao> _configuracoes;
-        public virtual int Id { get; set; }
         public virtual string Descricao { get; set; }
         public virtual string NomeAcesso { get; set; }
 
@@ -32,7 +31,7 @@ namespace AEGF.Dominio
         {
             // todo verifica nome
             // todo verifica valor
-            var cfg = new BancoConfiguracao()
+            var cfg = new BancoConfiguracao
             {
                 Nome = nome,
                 Valor = valor
