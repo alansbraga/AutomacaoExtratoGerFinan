@@ -123,10 +123,25 @@ namespace AEGF.BancosViaSite
             VaiParaIFramePrinc();
             TrocaFrameXPath("//*[@id=\"extrato\"]");
             var extrato = CriaRetorno("table.lista tr.trClaro", false, 0, 2, 5);
+            BuscaSaldo(extrato);
             extrato.Referencia = DateTime.Today;
             extrato.Descricao = "Conta Corrente " + numeroConta;
             _extratos.Add(extrato);
 
+        }
+
+        private void BuscaSaldo(Extrato extrato)
+        {
+            var trs = driver.FindElements(By.CssSelector("table.lista tr.trClaro"));
+            var colunas = trs[0].FindElements(By.TagName("td"));
+
+            var valorStr = colunas[6].Text;
+            double valor;
+
+            if (Double.TryParse(valorStr, out valor))
+            {
+                extrato.SaldoAnterior = valor;
+            }
         }
 
         private string BuscaNumeroConta()
@@ -213,7 +228,10 @@ namespace AEGF.BancosViaSite
         {
             VaiParaFramePrincipal();
 
-            TrocaFrameNome("MainFrame");
+            TrocaFrameNome("MainFrame");            
+            if (ExisteId("txtSenha"))
+                return;
+
             ClicaXPath("//*[@id=\"divFloaterStormFish\"]/div/map/area[1]");
         }
 

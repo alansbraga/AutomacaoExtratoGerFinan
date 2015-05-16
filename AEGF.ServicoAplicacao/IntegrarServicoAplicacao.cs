@@ -19,7 +19,7 @@ namespace AEGF.ServicoAplicacao
             _gerenciadorBancoAcesso = gerenciadorBancoAcesso;
         }
 
-        public void IntegrarContas()
+        public IEnumerable<Extrato> IntegrarContas()
         {
             var bancos = _bancoRepositorio.ObterTodos();
             var extratos = new List<Extrato>();
@@ -31,6 +31,7 @@ namespace AEGF.ServicoAplicacao
                     extratos.AddRange(lidos);
             }
             _gerenciadorFinanceiroAcesso.ProcessarContas(extratos);
+            return extratos;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace AEGF.Dominio
         public virtual bool CartaoCredito { get; set; }
         public virtual DateTime Referencia { get; set; }
         public virtual string Descricao { get; set; }
-        public virtual decimal SaldoAnterior { get; set; }
+        public virtual double SaldoAnterior { get; set; }
 
         public virtual IEnumerable<Transacao> Transacoes
         {
@@ -34,5 +34,21 @@ namespace AEGF.Dominio
             _transacoes.Add(novaTransacao);
         }
 
+        public double TotalMovimentacao { get; private set; }
+
+        public void CalcularTotais()
+        {
+            TotalMovimentacao = 0;
+            var atual = SaldoAnterior;
+            foreach (var transacao in Transacoes)
+            {
+                if ((CartaoCredito && (transacao.Valor < 0)))
+                    continue;
+                atual += transacao.Valor;
+                transacao.Saldo = atual;
+                    TotalMovimentacao += transacao.Valor;
+            }
+
+        }
     }
 }

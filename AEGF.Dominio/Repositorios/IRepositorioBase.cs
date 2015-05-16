@@ -10,5 +10,7 @@ namespace AEGF.Dominio.Repositorios
     {
         IEnumerable<T> ObterTodos();
         void Adicionar(T entidade);
+        void Excluir(T entidade);
+
     }
 }

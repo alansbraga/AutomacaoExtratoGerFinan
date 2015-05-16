@@ -53,8 +53,10 @@
     <Compile Include="Repositorios\IGerenciadorFinanceiroRepositorio.cs" />
     <Compile Include="Repositorios\IRepositorioBase.cs" />
     <Compile Include="Servicos\IBancoAcesso.cs" />
+    <Compile Include="Servicos\IFormatadorResumo.cs" />
     <Compile Include="Servicos\IGerenciadorFinanceiroAcesso.cs" />
     <Compile Include="Servicos\IResumoFinal.cs" />
+    <Compile Include="Servicos\ResumoFinal.cs" />
     <Compile Include="Transacao.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

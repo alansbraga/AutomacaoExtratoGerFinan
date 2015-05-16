@@ -35,7 +35,7 @@ namespace AEGF.RepositorioJson
         public void SalvarJson()
         {
             var nomeArquivo = DefineNomeArquivo();
-            var json = JsonConvert.SerializeObject(_dados);
+            var json = JsonConvert.SerializeObject(_dados, Formatting.Indented);
             File.WriteAllText(nomeArquivo, json);
         }
 
@@ -46,6 +46,11 @@ namespace AEGF.RepositorioJson
                 return;
             entidade.Id = BuscaUltimoId();
             _dados.Add(entidade);
+        }
+
+        public void Excluir(T entidade)
+        {
+            _dados.Remove(entidade);
         }
 
 

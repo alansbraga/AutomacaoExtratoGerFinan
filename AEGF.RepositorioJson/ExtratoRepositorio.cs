@@ -28,6 +28,11 @@ namespace AEGF.RepositorioJson
         protected override void ProcessarPosCarregamento(IEnumerable<Extrato> doArquivo)
         {
         }
-        
+
+
+        public IEnumerable<Extrato> ObterPorDescricaoReferencia(string descricao, DateTime referencia)
+        {
+            return _dados.Where(extrato => extrato.Descricao == descricao && extrato.Referencia == referencia);
+        }
     }
 }

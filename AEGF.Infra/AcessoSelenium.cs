@@ -141,6 +141,24 @@ namespace AEGF.Infra
 
         }
 
+        public bool ExisteId(string id)
+        {
+            return Existe(By.Id(id));
+        }
+
+        private bool Existe(By seletor)
+        {
+            try
+            {
+                var elemento = driver.FindElement(seletor);
+                return elemento != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         protected abstract string URLSite();
 
 
