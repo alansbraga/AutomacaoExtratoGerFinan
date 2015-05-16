@@ -175,27 +175,55 @@ namespace AEGF.BancosViaSite
             return retorno;
         }
 
-        private static void AdicionaItens(Extrato extrato, ReadOnlyCollection<IWebElement> linhas, int colData, int colDescricao, int colValor)
+        private void AdicionaItens(Extrato extrato, ReadOnlyCollection<IWebElement> linhas, int colData, int colDescricao, int colValor)
         {
+            double valorDolar = CriaValorDolar(extrato);
+
             foreach (var linha in linhas)
             {
+                var dolar = false;
                 var colunas = linha.FindElements(By.TagName("td"));
 
                 var valorStr = colunas[colValor].Text;
                 double valor;
 
-                if (Double.TryParse(valorStr, out valor))
+                if (!Double.TryParse(valorStr, out valor)) 
+                    continue;
+                if (valor == 0 && extrato.CartaoCredito)
                 {
-                    var item = new Transacao
+                    valorStr = colunas[colValor + 1].Text;
+                    if (Double.TryParse(valorStr, out valor))
                     {
-                        Valor = valor,
-                        Descricao = colunas[colDescricao].Text,
-                        Data = DateTime.Parse(colunas[colData].Text)
-                    };
-                    extrato.AdicionaTransacao(item);
-
+                        valor = valor*valorDolar;
+                        valor = Math.Round(valor, 2);
+                        dolar = true;
+                    }
+                        
                 }
+                var descricao = colunas[colDescricao].Text;
+                if (dolar)
+                    descricao += String.Format(" [Dolar: {0}]", valorDolar);
+                var item = new Transacao
+                {
+                    Valor = valor,
+                    Descricao = descricao,
+                    Data = DateTime.Parse(colunas[colData].Text)
+                };
+                extrato.AdicionaTransacao(item);
             }
+        }
+
+        private double CriaValorDolar(Extrato extrato)
+        {
+            if (!extrato.CartaoCredito)
+                return 0;
+            var valorStr = driver.FindElement(By.XPath("//*[@id=\"resdespbra\"]/table/tbody/tr[1]/td[3]/table/tbody/tr[4]/td[2]/strong")).Text;
+            double valor;
+            if (Double.TryParse(valorStr, out valor))
+            {
+                return valor;
+            }
+            return 0;
         }
 
         private void VaiParaIFramePrinc()
