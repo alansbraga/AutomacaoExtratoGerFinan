@@ -33,9 +33,14 @@ namespace AEGF.Infra
 
         public string GravarTemporario()
         {
-            var nomeArq = MakeValidFileName(_extrato.Descricao + " " + _extrato.Referencia + ".ofx");
+            var nomeArq = NomeArquivoExtrato();
             var arquivo = Path.Combine(Path.GetTempPath(), nomeArq);
             return GravarOFX(arquivo) ? arquivo : "";
+        }
+
+        public string NomeArquivoExtrato()
+        {
+            return MakeValidFileName(_extrato.Descricao + " " + _extrato.Referencia + ".ofx");
         }
 
         public bool GravarOFX(string nomeArquivo)

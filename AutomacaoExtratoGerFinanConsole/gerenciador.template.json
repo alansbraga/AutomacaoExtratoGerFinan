@@ -28,5 +28,15 @@
                 "MultiplicarMenosUm":  true
             }
         ]
+    },
+    {
+        "Descricao": "GeradorOFX",
+        "Nome": "GeradorOFX",
+        "Configuracoes": [
+            {
+                "Nome": "caminho",
+                "Valor": "C:\\caminho\\para\\os\\extratos\\"
+            }
+        ]
     }
 ]

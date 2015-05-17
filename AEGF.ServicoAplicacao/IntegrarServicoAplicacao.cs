@@ -8,29 +8,30 @@ namespace AEGF.ServicoAplicacao
 {
     public class IntegrarServicoAplicacao : IIntegrarServicoAplicacao
     {
-        private readonly IBancoRepositorio _bancoRepositorio;
-        private readonly IGerenciadorFinanceiroAcesso _gerenciadorFinanceiroAcesso;
+        private readonly IGerenciadorGFAcesso _gerenciadorFinanceiroAcesso;
         private readonly IGerenciadorBancoAcesso _gerenciadorBancoAcesso;
 
-        public IntegrarServicoAplicacao(IBancoRepositorio bancoRepositorio, IGerenciadorFinanceiroAcesso gerenciadorFinanceiroAcesso, IGerenciadorBancoAcesso gerenciadorBancoAcesso)
+        public IntegrarServicoAplicacao(IGerenciadorGFAcesso gerenciadorFinanceiroAcesso, IGerenciadorBancoAcesso gerenciadorBancoAcesso)
         {
-            _bancoRepositorio = bancoRepositorio;
             _gerenciadorFinanceiroAcesso = gerenciadorFinanceiroAcesso;
             _gerenciadorBancoAcesso = gerenciadorBancoAcesso;
         }
 
         public IEnumerable<Extrato> IntegrarContas()
         {
-            var bancos = _bancoRepositorio.ObterTodos();
+            var bancos = _gerenciadorBancoAcesso.CriaBancos();
             var extratos = new List<Extrato>();
             foreach (var banco in bancos)
             {
-                var gerenciadorBanco = _gerenciadorBancoAcesso.CriaBancoAcesso(banco);
-                var lidos = gerenciadorBanco.LerExtratos();
+                var lidos = banco.LerExtratos();
                 if (lidos.Any())
                     extratos.AddRange(lidos);
             }
-            _gerenciadorFinanceiroAcesso.ProcessarContas(extratos);
+
+            foreach (var gf in _gerenciadorFinanceiroAcesso.CriaGFs())
+            {
+                gf.ProcessarContas(extratos);
+            }
             return extratos;
         }
     }

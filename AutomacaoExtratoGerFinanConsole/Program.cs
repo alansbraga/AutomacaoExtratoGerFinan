@@ -19,25 +19,22 @@ namespace AutomacaoExtratoGerFinanConsole
         static void Main(string[] args)
         {
             var unidadeTrabalho = new UnidadeTrabalhoJson();
-            var repositorio = new BancoRepositorio(unidadeTrabalho);
-            var repositorioGF = new GerenciadorFinanceiroRepositorio(unidadeTrabalho);
+
             var repositorioExtrato = new ExtratoRepositorio(unidadeTrabalho);
-
             var formatador = new FormatadorHtml();
-
             var resumoFinal = new ResumoFinal(repositorioExtrato, formatador);
 
-            var gerenciador = repositorioGF.ObterTodos().First();
-            var gerenciadorFinanceiro = new MinhasEconomiasViaSite();
-            gerenciadorFinanceiro.Iniciar(gerenciador);
-            //var gerenciadorFinanceiro = new GerenciadorFinanceiroAcessoConsole();
+            var repositorioGF = new GerenciadorFinanceiroRepositorio(unidadeTrabalho);
+            var gerenciadorGF = new GerenciadorGFAcesso(repositorioGF);
+            gerenciadorGF.AdicionaGFAcesso(new MinhasEconomiasViaSite());
+            gerenciadorGF.AdicionaGFAcesso(new GFGeradorOFX());
 
-
-            var gerenciadorBanco = new GerenciadorBancoAcesso();
+            var repositorio = new BancoRepositorio(unidadeTrabalho);
+            var gerenciadorBanco = new GerenciadorBancoAcesso(repositorio);
             gerenciadorBanco.AdicionaBancoAcesso(new SantanderSite());
             gerenciadorBanco.AdicionaBancoAcesso(new CEFSite());
 
-            var integrador = new IntegrarServicoAplicacao(repositorio, gerenciadorFinanceiro, gerenciadorBanco);
+            var integrador = new IntegrarServicoAplicacao(gerenciadorGF, gerenciadorBanco);
             var extratos = integrador.IntegrarContas();
 
             var saida = "relatorioresumo.html";

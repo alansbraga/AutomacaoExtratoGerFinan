@@ -9,7 +9,7 @@ namespace AEGF.ServicoAplicacao
 {
     public interface IGerenciadorBancoAcesso
     {
-        IBancoAcesso CriaBancoAcesso(Banco banco);
         void AdicionaBancoAcesso(IBancoAcesso bancoAcesso);
+        IEnumerable<IBancoAcesso> CriaBancos();
     }
 }

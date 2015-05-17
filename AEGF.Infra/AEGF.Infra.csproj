@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="AcessoSelenium.cs" />
     <Compile Include="GeradorOFX.cs" />
+    <Compile Include="GFGeradorOFX.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

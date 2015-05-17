@@ -12,6 +12,7 @@ A ideia é fazer um programa que acesse de alguma forma os extratos dos bancos e
  
 ### Gereneciadores Financeiros implementados
 - Minhas Economias via Selenium
+- Gerador de Arquivos OFX em uma determinada Pasta
 
 ### Configurações
 - É necessário salvar os arquivos banco.template.json e gerenciador.template.json como banco.json e gerenciador.json na mesma pasta que eles se encontram.

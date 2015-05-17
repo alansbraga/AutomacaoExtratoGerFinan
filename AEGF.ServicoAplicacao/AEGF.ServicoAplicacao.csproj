@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="FormatadorHtml.cs" />
     <Compile Include="GerenciadorBancoAcesso.cs" />
+    <Compile Include="GerenciadorGFAcesso.cs" />
     <Compile Include="IGerenciadorBancoAcesso.cs" />
     <Compile Include="IIntegrarServicoAplicacao.cs" />
     <Compile Include="IntegrarServicoAplicacao.cs" />
