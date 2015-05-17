@@ -40,10 +40,10 @@ namespace AEGF.Dominio.Servicos
         private void DeixarApenasUltimos(IEnumerable<Extrato> extratosSalvos)
         {
             var total = extratosSalvos.Count();
-            if (total > 4)
+            if (total > 3)
             {
-                total = total - 4;
-                var paraExcluir = extratosSalvos.Take(total);
+                total = total - 3;
+                var paraExcluir = extratosSalvos.Take(total).ToArray();
                 foreach (var extrato in paraExcluir)
                 {
                     _repositorio.Excluir(extrato);

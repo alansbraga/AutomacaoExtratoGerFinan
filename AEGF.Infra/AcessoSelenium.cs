@@ -159,6 +159,18 @@ namespace AEGF.Infra
             }
         }
 
+        public string LerTextoCSS(string css)
+        {
+            return LerTexto(By.CssSelector(css));
+        }
+
+        public string LerTexto(By seletor)
+        {
+            var elemento = driver.FindElement(seletor);
+            return elemento.Text;
+            
+        }
+
         protected abstract string URLSite();
 
 

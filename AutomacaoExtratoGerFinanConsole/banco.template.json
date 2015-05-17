@@ -15,5 +15,22 @@
                 "valor":  "123456"
             }
         ]
+    },
+    {
+        "id": "2",
+        "descricao": "CEFSite",
+        "nomeAcesso": "CEFSite",
+        "configuracoes": [
+            {
+                "id": "1",
+                "nome": "usuario",
+                "valor": "seuusuario"
+            },
+            {
+                "id": "2",
+                "nome": "senha",
+                "valor":  "123456"
+            }
+        ]
     }
 ]

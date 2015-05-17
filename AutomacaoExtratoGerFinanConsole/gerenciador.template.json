@@ -16,9 +16,9 @@
             {
                 "ContaOrigem": "nome da conta do banco 1",
                 "ContaDestino": "nome da conta no minhas economias 1",
-                "IgnorarPositivos": true,
-                "MudaDataParaMesReferencia": true,
-                "MultiplicarMenosUm":  true
+                "IgnorarPositivos": false,
+                "MudaDataParaMesReferencia": false,
+                "MultiplicarMenosUm":  false
             },
             {
                 "ContaOrigem": "nome da conta do banco 2",
@@ -36,6 +36,22 @@
             {
                 "Nome": "caminho",
                 "Valor": "C:\\caminho\\para\\os\\extratos\\"
+            }
+        ],
+        "Contas": [
+            {
+                "ContaOrigem": "nome da conta do banco 1",
+                "ContaDestino": "nome do arquivo ofx",
+                "IgnorarPositivos": false,
+                "MudaDataParaMesReferencia": false,
+                "MultiplicarMenosUm":  false
+            },
+            {
+                "ContaOrigem": "nome da conta do banco 2",
+                "ContaDestino": "nome do arquivo ofx",
+                "IgnorarPositivos": true,
+                "MudaDataParaMesReferencia": true,
+                "MultiplicarMenosUm":  true
             }
         ]
     }

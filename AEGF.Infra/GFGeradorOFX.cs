@@ -18,13 +18,19 @@ namespace AEGF.ServicoAplicacao
         {
             foreach (var extrato in extratos)
             {
-                var gerador = new GeradorOFX(extrato, new OpcoesOFX()
-                {
-                    IgnorarPositivos = extrato.CartaoCredito,
-                    MudaDataParaMesReferencia = extrato.CartaoCredito,
-                    MultiplicarMenosUm = extrato.CartaoCredito
-                });
-                var arquivo = Path.Combine(_gerenciador.LerConfiguracao("caminho"), gerador.NomeArquivoExtrato());
+                var conta = _gerenciador.LerConta(extrato.Descricao);
+
+                if (conta == null)
+                    continue;
+
+                var contaDestino = conta.ContaDestino;
+
+                if (String.IsNullOrEmpty(contaDestino))
+                    continue;
+
+                var gerador = new GeradorOFX(extrato, new OpcoesOFX(conta));
+                var nomeArquivo = GeradorOFX.MakeValidFileName(String.Format("{0} - {1}.ofx", contaDestino, extrato.Referencia.ToString("yyyyMMdd")));
+                var arquivo = Path.Combine(_gerenciador.LerConfiguracao("caminho"), nomeArquivo);
                 gerador.GravarOFX(arquivo);
             }                       
         }

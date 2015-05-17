@@ -96,7 +96,7 @@ namespace AEGF.Infra
 
         }
 
-        private static string MakeValidFileName(string name)
+        public static string MakeValidFileName(string name)
         {
             string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(Path.GetInvalidFileNameChars()));
             string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
@@ -173,6 +173,18 @@ namespace AEGF.Infra
 
     public class OpcoesOFX
     {
+        public OpcoesOFX()
+        {
+            
+        }
+
+        public OpcoesOFX(GerenciadorFinanceiroContas conta)
+        {
+            MudaDataParaMesReferencia = conta.MudaDataParaMesReferencia;
+            MultiplicarMenosUm = conta.MultiplicarMenosUm;
+            IgnorarPositivos = conta.IgnorarPositivos;
+        }
+
         public bool MudaDataParaMesReferencia { get; set; }
         public bool MultiplicarMenosUm { get; set; }
         public bool IgnorarPositivos { get; set; }

@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AcessoSelenium.cs" />
+    <Compile Include="DateUtils.cs" />
     <Compile Include="Erros.cs" />
     <Compile Include="GeradorOFX.cs" />
     <Compile Include="GFGeradorOFX.cs" />

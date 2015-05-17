@@ -34,12 +34,7 @@ namespace AEGF.GFViaSite
                 if (String.IsNullOrEmpty(contaDestino))
                     continue;
 
-                var gerador = new GeradorOFX(extrato, new OpcoesOFX
-                {
-                    IgnorarPositivos = extrato.CartaoCredito,
-                    MudaDataParaMesReferencia = extrato.CartaoCredito,
-                    MultiplicarMenosUm = extrato.CartaoCredito
-                });
+                var gerador = new GeradorOFX(extrato, new OpcoesOFX(conta));
                 var arquivo = gerador.GravarTemporario();
                 if (!File.Exists(arquivo)) 
                     continue;

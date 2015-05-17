@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
@@ -41,22 +42,38 @@ namespace AEGF.BancosViaSite
 
         private void LerExtrato()
         {
+            Tempo();
             ClicaXPath("//nav[@id='carousel-home']/div/ul/li[1]/a/img");
             ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
+            Tempo();
             SelecionaMesAtual();
-            LerTabelaExtrato(DateTime.Today);
+            var numConta = LerNumeroConta();
+            LerTabelaExtrato(numConta, DateTime.Today.PrimeiroDia());
+            Tempo();
             ClicaXPath("//nav[@id='carousel-internas']/div/ul/li[1]/a/img");
             ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
+            Tempo();
             SelecionaMesAnterior();
-            LerTabelaExtrato(DateTime.Today.AddMonths(-1));
+            LerTabelaExtrato(numConta, DateTime.Today.AddMonths(-1).PrimeiroDia());
         }
 
-        private void LerTabelaExtrato(DateTime referencia)
+        private string LerNumeroConta()
+        {
+            return LerTextoCSS("#contaSelecionada li.conta strong");
+        }
+
+        private void Tempo()
+        {
+            // Site da CEF é temperamental, se for muito rápido ele dá erro
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+        }
+
+        private void LerTabelaExtrato(string numConta, DateTime referencia)
         {
             AguardarCSS("table.movimentacao");
             var extrato = CriaRetorno("table.movimentacao tr", false, 0, 2, 3);
             extrato.Referencia = referencia;
-            extrato.Descricao = String.Format("Conta Corrente - {0}", referencia.ToString("yy-MM"));
+            extrato.Descricao = String.Format("CEF Conta Corrente - {0}", numConta);
             _extratos.Add(extrato);
 
         }
@@ -78,21 +95,21 @@ namespace AEGF.BancosViaSite
             foreach (var linha in linhas)
             {
                 linhaAtual++;
+
+                var colunas = linha.FindElements(By.TagName("td"));
+
+                if (linhaAtual == 3)
+                    extrato.SaldoAnterior = BuscaValor(colunas, colValor + 1);
+
                 if (linhaAtual <= 3)
                     continue;                
 
 
-                var colunas = linha.FindElements(By.TagName("td"));
 
-                var colunaValor = colunas[colValor].Text.Split(' ');
-                var valorStr = colunaValor[0];
-                double valor;
+                var valor = BuscaValor(colunas, colValor);
 
-                if (Double.TryParse(valorStr, out valor))
+                if (valor != 0)
                 {
-                    if (colunaValor[1] == "D")
-                        valor *= -1;
-
                     var item = new Transacao()
                     {
                         Valor = valor,
@@ -103,6 +120,20 @@ namespace AEGF.BancosViaSite
 
                 }
             }
+        }
+
+        private static double BuscaValor(ReadOnlyCollection<IWebElement> colunas, int colValor)
+        {
+            var colunaValor = colunas[colValor].Text.Split(' ');
+            var valorStr = colunaValor[0];
+            double valor;
+
+            if (Double.TryParse(valorStr, out valor))
+            {                
+                if ((valor != 0) && (colunaValor[1] == "D"))
+                    valor *= -1;
+            }
+            return valor;
         }
 
 
@@ -123,7 +154,9 @@ namespace AEGF.BancosViaSite
             const string id = "rdoTipoExtratoOutro";
             AguardarId(id);
             ClicaId(id);
+            Tempo();
             ClicaXPath("//*[@id=\"dk_container_sltOutroMes\"]/a");
+            Tempo();
             ClicaXPath("//*[@id=\"dk_container_sltOutroMes\"]/div/ul/li[2]/a");
             ConfirmaMesExtrato();
         }
