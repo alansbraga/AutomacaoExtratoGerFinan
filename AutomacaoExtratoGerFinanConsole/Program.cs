@@ -38,7 +38,7 @@ namespace AutomacaoExtratoGerFinanConsole
             var extratos = integrador.IntegrarContas();
 
             var saida = "relatorioresumo.html";
-            resumoFinal.CriarResumo(saida, extratos);            
+            resumoFinal.CriarResumo(saida, extratos, integrador.Erros);            
             unidadeTrabalho.Gravar();
 
             Process.Start(saida);

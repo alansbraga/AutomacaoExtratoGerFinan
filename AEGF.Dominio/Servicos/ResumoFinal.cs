@@ -18,10 +18,10 @@ namespace AEGF.Dominio.Servicos
             _formatador = formatador;
         }
 
-        public void CriarResumo(string arquivoSaida, IEnumerable<Extrato> extratos)
+        public void CriarResumo(string arquivoSaida, IEnumerable<Extrato> extratos, IEnumerable<Exception> erros)
         {
             VerificarNovosRegistros(extratos);
-            _formatador.Formatar(arquivoSaida, extratos);
+            _formatador.Formatar(arquivoSaida, extratos, erros);
         }
 
         private void VerificarNovosRegistros(IEnumerable<Extrato> extratos)

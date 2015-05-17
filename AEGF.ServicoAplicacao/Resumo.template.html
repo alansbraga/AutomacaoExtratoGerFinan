@@ -146,5 +146,12 @@
     </table>
 <hr />
 {% endfor -%}
+
+<h3>Erros</h3>
+    <ul>
+        {% for erro in erros -%}
+        <li>{{erro}}</li>
+        {% endfor -%}
+    </ul>
 </body>
 </html>

@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AEGF.Dominio.Servicos
 {
     public interface IFormatadorResumo
     {
-        void Formatar(string arquivoSaida, IEnumerable<Extrato> extratos);
+        void Formatar(string arquivoSaida, IEnumerable<Extrato> extratos, IEnumerable<Exception> erros);
     }
 }

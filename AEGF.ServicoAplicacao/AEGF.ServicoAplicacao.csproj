@@ -57,6 +57,10 @@
       <Project>{5aacc824-6e68-4fb9-bcee-d6df5e66265a}</Project>
       <Name>AEGF.Dominio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AEGF.Infra\AEGF.Infra.csproj">
+      <Project>{F1005CA5-8FFD-4D13-9EB3-4EC485513A9A}</Project>
+      <Name>AEGF.Infra</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resumo.template.html">

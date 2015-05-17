@@ -8,6 +8,6 @@ namespace AEGF.Dominio.Servicos
 {
     interface IResumoFinal
     {
-        void CriarResumo(string arquivoSaida, IEnumerable<Extrato> extratos);
+        void CriarResumo(string arquivoSaida, IEnumerable<Extrato> extratos, IEnumerable<Exception> erros);
     }
 }
