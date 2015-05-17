@@ -107,7 +107,7 @@
 </head>
 <body>
 {% for extrato in extratos -%}
-<h4>Conta: {{extrato.Descricao}} - {{extrato.Referencia}}</h4>
+<h3>Conta: {{extrato.Descricao}} Refer&ecirc;ncia: {{extrato.Referencia | date:"dd/MM/yyyy"}}</h3>
 
     <table class="CSSTableGenerator">
         <tbody>

@@ -124,7 +124,7 @@ namespace AEGF.BancosViaSite
             TrocaFrameXPath("//*[@id=\"extrato\"]");
             var extrato = CriaRetorno("table.lista tr.trClaro", false, 0, 2, 5);
             BuscaSaldo(extrato);
-            extrato.Referencia = DateTime.Today;
+            extrato.Referencia = DateTime.MinValue; // Sem referência para que o resumo fique sempre mostrando os novos registros
             extrato.Descricao = "Conta Corrente " + numeroConta;
             _extratos.Add(extrato);
 
