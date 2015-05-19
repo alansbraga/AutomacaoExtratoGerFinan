@@ -217,11 +217,17 @@ namespace AEGF.BancosViaSite
         {
             if (!extrato.CartaoCredito)
                 return 0;
-            var valorStr = driver.FindElement(By.XPath("//*[@id=\"resdespbra\"]/table/tbody/tr[1]/td[3]/table/tbody/tr[4]/td[2]/strong")).Text;
-            double valor;
-            if (Double.TryParse(valorStr, out valor))
+            try
             {
-                return valor;
+                var valorStr = driver.FindElement(By.XPath("//*[@id=\"resdespbra\"]/table/tbody/tr[1]/td[3]/table/tbody/tr[4]/td[2]/strong")).Text;
+                double valor;
+                if (Double.TryParse(valorStr, out valor))
+                {
+                    return valor;
+                }
+            }
+            catch (Exception e)
+            {
             }
             return 0;
         }
