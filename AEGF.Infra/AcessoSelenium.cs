@@ -118,7 +118,7 @@ namespace AEGF.Infra
         }
 
 
-        protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 10)
+        protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 60)
         {
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(segundos));
             
