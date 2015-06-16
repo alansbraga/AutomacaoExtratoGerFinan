@@ -248,10 +248,10 @@ namespace AEGF.BancosViaSite
 
         private void FazerLogin()
         {
-            TrocaFrameId("iframetopo");
+            //TrocaFrameId("iframetopo");
 
-            DigitaTextoId("txtCPF", _banco.LerConfiguracao("CPF") /*_banco.Configuracoes.Single(configuracao => configuracao.Nome == "CPF").Valor*/);
-            ClicaId("hrefOk");
+            DigitaTextoId("cfp", _banco.LerConfiguracao("CPF") /*_banco.Configuracoes.Single(configuracao => configuracao.Nome == "CPF").Valor*/);
+            ClicaXPath("//*[@id=\"formularioFisica\"]/fieldset/ul/li[2]/input");
             FechaMensagemPlugin();
 
             DigitaTextoId("txtSenha", _banco.LerConfiguracao("Senha")/*_banco.Configuracoes.Single(configuracao => configuracao.Nome == "Senha").Valor*/);
