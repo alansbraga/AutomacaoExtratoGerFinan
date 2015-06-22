@@ -256,6 +256,18 @@ namespace AEGF.BancosViaSite
 
             DigitaTextoId("txtSenha", _banco.LerConfiguracao("Senha")/*_banco.Configuracoes.Single(configuracao => configuracao.Nome == "Senha").Valor*/);
             ClicaXPath("//*[@id=\"divBotoes\"]/a[1]");
+            FechaMensagemSenhaTelefone();
+        }
+
+        private void FechaMensagemSenhaTelefone()
+        {
+            VaiParaCorpo();
+            if (ExisteId("FloaterAlertaAviso"))
+            {
+                TrocaFrameId("FloaterAlertaAviso");
+                ClicaXPath("//*[@id=\"alertaAviso\"]/area");
+            }
+            VaiParaFramePrincipal();
         }
 
         private void FechaMensagemPlugin()
