@@ -104,7 +104,11 @@ namespace AEGF.BancosViaSite
                 if (linhaAtual <= 3)
                     continue;                
 
+                if (colunas.Count < colValor)
+                    continue;
 
+                if (colunas[0].Text.ToLower().Contains("data"))
+                    continue;
 
                 var valor = BuscaValor(colunas, colValor);
 

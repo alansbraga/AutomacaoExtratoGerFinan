@@ -99,24 +99,25 @@ namespace AEGF.GFViaSite
 
         private void ClicarNoImportar()
         {
-            const string id = "ext-gen703";
-            AguardarId(id);            
-            ClicaId(id);
+            const string id = "//table[contains(@class, 'x-importar')]//button";
+            AguardarXPath(id);            
+            ClicaXPath(id);
         }
 
         private void PosicionarNasTransacoes()
         {
-            const string id = "ext-gen418";
-            AguardarId(id);
+            
+            const string id = "//button[text()=\"Transações\"]";
+            AguardarXPath(id);
             try
             {
                 Thread.Sleep(new TimeSpan(0, 0, 5));
-                ClicaId(id);
+                ClicaXPath(id);
             }
             catch (Exception ex)
             {
                 Thread.Sleep(new TimeSpan(0, 0, 10));
-                ClicaId(id);
+                ClicaXPath(id);
             }
 
         }
