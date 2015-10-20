@@ -124,6 +124,7 @@ namespace AEGF.GFViaSite
 
         private void FazerLogin()
         {
+            AguardarId("email");
             DigitaTextoId("email", _gerenciador.LerConfiguracao("email"));
             DigitaTextoId("senha", _gerenciador.LerConfiguracao("senha"));
             ClicaXPath("//*[@id=\"login\"]/button");

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 
 namespace AEGF.Infra
@@ -23,6 +24,7 @@ namespace AEGF.Infra
             // todo configurar o browser
             //IWebDriver driver = new FirefoxDriver();
             return new ChromeDriver();
+            //return new FirefoxDriver();
         }
 
         protected void FecharBrowser()
