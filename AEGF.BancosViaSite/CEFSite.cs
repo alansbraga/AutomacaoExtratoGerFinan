@@ -43,7 +43,9 @@ namespace AEGF.BancosViaSite
         private void LerExtrato()
         {
             Tempo();
-            ClicaXPath("//nav[@id='carousel-home']/div/ul/li[1]/a/img");
+            var xpath = "//nav[@id='carousel-home']/ul/li[1]/a/img";
+            AguardarXPath(xpath);
+            ClicaXPath(xpath);
             ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
             Tempo();
             SelecionaMesAtual();
@@ -190,8 +192,7 @@ namespace AEGF.BancosViaSite
                     By.Id("85Confirm"));
             Actions acaoBotao = new Actions(driver);
             acaoBotao.MoveToElement(botao).Click().Perform();
-            //ClicaCSS("button.button-blue");
-            AguardarXPath("//nav[@id='carousel-home']/div/ul/li[1]/a/img");
+           
         }
 
 

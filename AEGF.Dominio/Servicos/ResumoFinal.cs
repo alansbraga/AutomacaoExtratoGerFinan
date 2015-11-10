@@ -55,7 +55,16 @@ namespace AEGF.Dominio.Servicos
         {
             foreach (var transacaoVelha in ultimo.Transacoes)
             {
-                var transacaoNova = atual.Transacoes.SingleOrDefault(transacao => transacao.Equals(transacaoVelha));
+                Transacao transacaoNova = null;
+                try
+                {
+                    transacaoNova = atual.Transacoes.SingleOrDefault(transacao => transacao.Equals(transacaoVelha));
+                }
+                catch
+                {
+                    // ignored
+                }
+
                 if (transacaoNova == null)
                     continue;
                 transacaoNova.Nova = false;
