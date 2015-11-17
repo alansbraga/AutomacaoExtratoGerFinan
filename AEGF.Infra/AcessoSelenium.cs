@@ -69,8 +69,10 @@ namespace AEGF.Infra
             DigitaTexto(By.Id(xPath), valor);
         }
 
-        protected void Clica(By seletor)
+        protected void Clica(By seletor, bool aguardar = false)
         {
+            if (aguardar)
+                Aguardar(seletor);
             var query = driver.FindElement(seletor);            
             query.Click();
 
@@ -86,9 +88,9 @@ namespace AEGF.Infra
         }
 
 
-        protected void ClicaXPath(string xPath)
+        protected void ClicaXPath(string xPath, bool aguardar = false)
         {
-            Clica(By.XPath(xPath));
+            Clica(By.XPath(xPath), aguardar);
         }
 
 

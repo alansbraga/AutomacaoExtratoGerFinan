@@ -9,6 +9,7 @@ using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
 using AEGF.Infra;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 
 namespace AEGF.BancosViaSite
@@ -96,10 +97,10 @@ namespace AEGF.BancosViaSite
         private void ClicaFatura()
         {
             VaiParaMenu();
-            ClicaXPath("//*[@id=\"3975Link\"]");
+            ClicaXPath("//*[@id=\"3975Link\"]", true);
             driver.SwitchTo().DefaultContent();
             VaiParaCorpo();
-            ClicaXPath("//*[@id=\"montaMenu\"]/ul/li[1]/ul/li[2]/a");
+            ClicaXPath("//*[@id=\"montaMenu\"]/ul/li[1]/ul/li[2]/a", true);
         }
 
 
@@ -154,6 +155,7 @@ namespace AEGF.BancosViaSite
 
         private Extrato CriaRetorno(string cssPath, bool tipoCartao, int colData, int colDescricao, int colValor)
         {
+            AguardarCSS(cssPath);
             var trs = driver.FindElements(By.CssSelector(cssPath));
             var retorno = new Extrato { CartaoCredito = tipoCartao };
 
@@ -243,7 +245,7 @@ namespace AEGF.BancosViaSite
             VaiParaCorpo();
             TrocaFrameXPath("//*[@id=\"iframePainel\"]");
             SelecionaValorXPath("//*[@id=\"select\"]/select", "30");
-            ClicaXPath("//*[@id=\"extrato\"]/tbody/tr/td[3]/a");
+            ClicaXPath("//*[@id=\"extrato\"]/tbody/tr/td[3]/a", true);
         }
 
         private void FazerLogin()
@@ -326,6 +328,14 @@ namespace AEGF.BancosViaSite
         protected override string URLSite()
         {
             return "http://www.santander.com.br";
+        }
+
+        protected override IWebDriver CriarBrowser()
+        {
+            var f = new FirefoxProfileManager();
+            var p = f.GetProfile("default");
+
+            return new FirefoxDriver(p);
         }
     }
 }
