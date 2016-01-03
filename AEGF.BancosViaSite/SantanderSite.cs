@@ -25,10 +25,27 @@ namespace AEGF.BancosViaSite
             IniciarBrowser();
             Inicio();
             FazerLogin();
+            FecharAvisos();
             LerExtrato();
             LerCartoes();
             FecharBrowser();
             return _extratos;
+        }
+
+        private void FecharAvisos()
+        {
+            FecharAvisoFimDeAno();
+        }
+
+        private void FecharAvisoFimDeAno()
+        {
+            VaiParaCorpo();
+            if (ExisteId("FloaterAvisoCartao"))
+            {
+                TrocaFrameId("FloaterAvisoCartao");
+                ClicaXPath("//*[@id=\"fimdeano\"]/area");
+            }
+            VaiParaFramePrincipal();
         }
 
         private void LerCartoes()
@@ -332,10 +349,11 @@ namespace AEGF.BancosViaSite
 
         protected override IWebDriver CriarBrowser()
         {
-            var f = new FirefoxProfileManager();
-            var p = f.GetProfile("default");
+//            var f = new FirefoxProfileManager();
+//            var p = f.GetProfile("default");
 
-            return new FirefoxDriver(p);
+//            return new FirefoxDriver(p);
+            return base.CriarBrowser();
         }
     }
 }
