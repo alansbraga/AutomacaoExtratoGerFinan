@@ -32,25 +32,27 @@ namespace AEGF.Infra
             driver.Quit();
         }
 
-        protected void TrocaFrame(By seletor)
+        protected void TrocaFrame(By seletor, bool aguardar = false)
         {
+            if (aguardar)
+                Aguardar(seletor);
             var frame = driver.FindElement(seletor);
             driver.SwitchTo().Frame(frame);
         }
 
-        protected void TrocaFrameXPath(string xPath)
+        protected void TrocaFrameXPath(string xPath, bool aguardar = false)
         {
-            TrocaFrame(By.XPath(xPath));
+            TrocaFrame(By.XPath(xPath), aguardar);
         }
 
-        protected void TrocaFrameNome(string nome)
+        protected void TrocaFrameNome(string nome, bool aguardar = false)
         {
-            TrocaFrame(By.Name(nome));
+            TrocaFrame(By.Name(nome), aguardar);
         }
 
-        protected void TrocaFrameId(string id)
+        protected void TrocaFrameId(string id, bool aguardar = false)
         {
-            TrocaFrame(By.Id(id));
+            TrocaFrame(By.Id(id), aguardar);
         }
 
         private void DigitaTexto(By seletor, string valor)

@@ -125,7 +125,7 @@ namespace AEGF.BancosViaSite
         {
             driver.SwitchTo().DefaultContent();
             VaiParaFramePrincipal();
-            TrocaFrameXPath("//*[@id=\"frameMain\"]/frame[1]");
+            TrocaFrameXPath("//*[@id=\"frameMain\"]/frame[1]", true);
         }
 
         private void LerExtrato()
@@ -322,7 +322,7 @@ namespace AEGF.BancosViaSite
         private void VaiParaCorpo()
         {
             VaiParaFramePrincipal();
-            TrocaFrameXPath("//*[@id=\"frameMain\"]/frame[2]");
+            TrocaFrameXPath("//*[@id=\"frameMain\"]/frame[2]", true);
             
         }
 
