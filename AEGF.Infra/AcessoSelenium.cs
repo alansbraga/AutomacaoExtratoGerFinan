@@ -79,9 +79,9 @@ namespace AEGF.Infra
             query.Click();
 
         }
-        protected void ClicaId(string id)
+        protected void ClicaId(string id, bool aguardar = false)
         {
-            Clica(By.Id(id));
+            Clica(By.Id(id), aguardar);
         }
 
         protected void ClicaCSS(string css)

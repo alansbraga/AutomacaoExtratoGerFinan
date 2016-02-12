@@ -173,7 +173,7 @@ namespace AEGF.BancosViaSite
             DigitaTextoId("usuario", _banco.LerConfiguracao("usuario"));
             ClicaXPath("//*[@id=\"divPF\"]/input");
             ClicaXPath("//*[@id=\"botaoAcessar\"]/button/span");
-            ClicaId("iniciais");
+            ClicaId("iniciais", true);
             // Usuario tem que digitar a senha
             AguardarXPath("//div[contains(@class, 'keyboard-button') and text()='a']");
 
