@@ -152,6 +152,12 @@ namespace AEGF.Infra
             return Existe(By.Id(id));
         }
 
+        public bool ExisteXPath(string xPath)
+        {
+            return Existe(By.XPath(xPath));
+        }
+
+
         private bool Existe(By seletor)
         {
             try

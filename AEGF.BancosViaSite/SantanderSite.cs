@@ -85,9 +85,12 @@ namespace AEGF.BancosViaSite
                 TrocaFrameId("iDetalhes");
 
 
-                var extrato = CriaRetorno("#detfatura tr.trClaro", true, 0, 1, 2);
-                extrato.Descricao = descricao;
-                _extratos.Add(extrato);
+                if (!FaturaAcabouDeFechar())
+                {
+                    var extrato = CriaRetorno("#detfatura tr.trClaro", true, 0, 1, 2);
+                    extrato.Descricao = descricao;
+                    _extratos.Add(extrato);
+                }
 
                 if (!segunda)
                 {
@@ -104,6 +107,11 @@ namespace AEGF.BancosViaSite
                 }
             } while (segunda);
             return true;
+        }
+
+        private bool FaturaAcabouDeFechar()
+        {
+            return ExisteXPath("/html/body/div[1]/p");
         }
 
         private void FechaPostIt()
