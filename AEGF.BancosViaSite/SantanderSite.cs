@@ -300,12 +300,12 @@ namespace AEGF.BancosViaSite
         private void FechaMensagemPlugin()
         {
             VaiParaFramePrincipal();
+            TrocaFrameNome("MainFrame");
 
-            TrocaFrameNome("MainFrame");            
-            if (ExisteId("txtSenha"))
-                return;
-
-            ClicaXPath("//*[@id=\"divFloaterStormFish\"]/div/map/area[1]");
+            var idPopup = "splash-10000-remind-me-later";
+            AguardarId(idPopup);
+            if (ExisteId(idPopup))
+                ClicaId(idPopup);
         }
 
 
