@@ -176,6 +176,16 @@ namespace AEGF.Infra
             return LerTexto(By.CssSelector(css));
         }
 
+        public string LerTextoId(string id)
+        {
+            return LerTexto(By.Id(id));
+        }
+
+        public string LerTextoXPath(string xpath)
+        {
+            return LerTexto(By.XPath(xpath));
+        }
+
         public string LerTexto(By seletor)
         {
             var elemento = driver.FindElement(seletor);
