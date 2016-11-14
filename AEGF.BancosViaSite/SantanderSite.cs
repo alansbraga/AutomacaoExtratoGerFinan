@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
@@ -303,7 +304,7 @@ namespace AEGF.BancosViaSite
             TrocaFrameNome("MainFrame");
 
             var idPopup = "splash-10000-close-button";
-            AguardarId(idPopup);
+            Thread.Sleep(new TimeSpan(0, 0, 5));
             if (ExisteId(idPopup))
                 ClicaId(idPopup);
         }
