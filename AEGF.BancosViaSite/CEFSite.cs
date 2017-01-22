@@ -21,13 +21,14 @@ namespace AEGF.BancosViaSite
         private Banco _banco;
         private ICollection<Extrato> _extratos;
 
+        /*
         protected override IWebDriver CriarBrowser()
         {
             var f = new FirefoxProfileManager();
             var p = f.GetProfile("default");
             
-            return new FirefoxDriver(p);            
-        }
+            return new FirefoxDriver();            
+        }*/
 
         public IEnumerable<Extrato> LerExtratos()
         {
@@ -43,20 +44,20 @@ namespace AEGF.BancosViaSite
         private void LerExtrato()
         {
             Tempo();
-            var xpath = "//nav[@id='carousel-home']/ul/li[1]/a/img";
-            AguardarXPath(xpath);
-            ClicaXPath(xpath);
-            ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
-            Tempo();
+            VaiParaSelecaoExtrato();
             SelecionaMesAtual();
             var numConta = LerNumeroConta();
             LerTabelaExtrato(numConta, DateTime.Today.PrimeiroDia());
             Tempo();
-            ClicaXPath("//nav[@id='carousel-internas']/div/ul/li[1]/a/img");
-            ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
-            Tempo();
+            VaiParaSelecaoExtrato();
             SelecionaMesAnterior();
             LerTabelaExtrato(numConta, DateTime.Today.AddMonths(-1).PrimeiroDia());
+        }
+
+        private void VaiParaSelecaoExtrato()
+        {
+            driver.Navigate().GoToUrl("https://internetbanking.caixa.gov.br/SIIBC/interna#!/extrato_periodo.processa");
+            Tempo();
         }
 
         private string LerNumeroConta()
@@ -145,6 +146,7 @@ namespace AEGF.BancosViaSite
 
         private void SelecionaMesAtual()
         {
+            ClicaXPath("//label[@for='rdoTipoExtratoAtual']", true);
             ConfirmaMesExtrato();
         }
 
@@ -169,30 +171,26 @@ namespace AEGF.BancosViaSite
 
         private void FazerLogin()
         {
+            var usuarioid = "nomeUsuario";
+            AguardarId(usuarioid);
+            DigitaTextoId(usuarioid, _banco.LerConfiguracao("usuario"));
+            ClicaId("tpPessoaFisica");
+            ClicaId("btnLogin");
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            ClicaId("lnkInitials", true);
+            AguardarXPath("//*[@id=\"teclado\"]/ul/li[contains(@class, 'key') and text()='a']");
             
-            DigitaTextoId("usuario", _banco.LerConfiguracao("usuario"));
-            ClicaXPath("//*[@id=\"divPF\"]/input");
-            ClicaXPath("//*[@id=\"botaoAcessar\"]/button/span");
-            ClicaId("iniciais", true);
-            // Usuario tem que digitar a senha
-            AguardarXPath("//div[contains(@class, 'keyboard-button') and text()='a']");
-
             var senha = _banco.LerConfiguracao("senha");
 
             foreach (var letra in senha)
             {
                 var elemento =
                     driver.FindElement(
-                        By.XPath(String.Format("//div[contains(@class, 'keyboard-button') and text()='{0}']", letra)));
+                        By.XPath(String.Format("//*[@id=\"teclado\"]/ul/li[contains(@class, 'key') and text()='{0}']", letra)));
                 Actions builder = new Actions(driver);
                 builder.MoveToElement(elemento).Click().Perform();
             }
-            var botao =
-                driver.FindElement(
-                    By.Id("85Confirm"));
-            Actions acaoBotao = new Actions(driver);
-            acaoBotao.MoveToElement(botao).Click().Perform();
-           
+            ClicaId("btnConfirmar");
         }
 
 
