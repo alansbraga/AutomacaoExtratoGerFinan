@@ -31,9 +31,15 @@ namespace AutomacaoExtratoGerFinanConsole
 
             var repositorio = new BancoRepositorio(unidadeTrabalho);
             var gerenciadorBanco = new GerenciadorBancoAcesso(repositorio);
+
+            /*descomentar abaixo os bancos que você vai usar....*/
             gerenciadorBanco.AdicionaBancoAcesso(new SantanderSite());
-            gerenciadorBanco.AdicionaBancoAcesso(new CEFSite());
             gerenciadorBanco.AdicionaBancoAcesso(new CetelemSite());
+
+            gerenciadorBanco.AdicionaBancoAcesso(new CEFSiteFisico());
+            gerenciadorBanco.AdicionaBancoAcesso(new CEFSiteJuridico());
+            gerenciadorBanco.AdicionaBancoAcesso(new BanestesSite());
+            gerenciadorBanco.AdicionaBancoAcesso(new BBSiteJuridico());
 
             var integrador = new IntegrarServicoAplicacao(gerenciadorGF, gerenciadorBanco);
             var extratos = integrador.IntegrarContas();
