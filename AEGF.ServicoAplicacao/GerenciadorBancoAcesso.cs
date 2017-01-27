@@ -19,9 +19,18 @@ namespace AEGF.ServicoAplicacao
 
         private IBancoAcesso CriaBancoAcesso(Banco banco)
         {
-            var bancoAcesso = _bancos[banco.NomeAcesso];
-            bancoAcesso.Iniciar(banco);
-            return bancoAcesso;
+            // para o caso de ter criados chaves a mais, porém não há classe para ela...
+            try
+            {
+                var bancoAcesso = _bancos[banco.NomeAcesso];
+                bancoAcesso.Iniciar(banco);
+                return bancoAcesso;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public void AdicionaBancoAcesso(IBancoAcesso bancoAcesso)
@@ -36,10 +45,12 @@ namespace AEGF.ServicoAplicacao
             foreach (var banco in bancos)
             {
                 var gerenciadorBanco = CriaBancoAcesso(banco);
-                retorno.Add(gerenciadorBanco);
+                // verifica se há banco retornado
+                if (gerenciadorBanco != null)
+                    retorno.Add(gerenciadorBanco);
             }
             return retorno;
-            
+
         }
     }
 }
