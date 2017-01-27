@@ -69,8 +69,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CEFSiteFisico.cs" />
+    <Compile Include="ConnectMed.cs" />
+    <Compile Include="BBSite.cs" />
+    <Compile Include="BanestesSite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CEFSite.cs" />
+    <Compile Include="CEFSiteJuridico.cs" />
     <Compile Include="CetelemSite.cs" />
     <Compile Include="SantanderSite.cs" />
   </ItemGroup>

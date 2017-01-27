@@ -6,30 +6,54 @@ using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 
 namespace AEGF.Infra
 {
     public abstract class AcessoSelenium
     {
-        protected void IniciarBrowser()
+        public enum Browser
         {
-            driver = CriarBrowser();
+            ChromeDriver,
+            FirefoxDriver,
+            InternetExplorerDriver
+        }
+        protected void IniciarBrowser(Browser browser = Browser.ChromeDriver)
+        {
+            driver = CriarBrowser(browser);
             driver.Navigate().GoToUrl(URLSite());
             driver.Manage().Window.Maximize();
         }
 
-        protected virtual IWebDriver CriarBrowser()
+        protected virtual IWebDriver CriarBrowser(Browser browser = Browser.ChromeDriver)
         {
-            // todo configurar o browser
-            //IWebDriver driver = new FirefoxDriver();
-            return new ChromeDriver();
-            //return new FirefoxDriver();
+            switch (browser)
+            {
+                default:
+                case Browser.ChromeDriver:
+                    return new ChromeDriver();
+                    //break;
+                case Browser.FirefoxDriver:
+                    return new FirefoxDriver();
+                    //break;
+                case Browser.InternetExplorerDriver:
+                    return new InternetExplorerDriver();
+                    //break;
+            }
         }
 
         protected void FecharBrowser()
         {
             driver.Quit();
+        }
+
+        protected void TrocaPopUp(By seletor, bool aguardar = false)
+        {
+            if (aguardar)
+                Aguardar(seletor, true, 60, true);
+            //var frame = driver.FindElement(seletor);
+            //driver.SwitchTo().Frame(frame);
         }
 
         protected void TrocaFrame(By seletor, bool aguardar = false)
@@ -66,6 +90,11 @@ namespace AEGF.Infra
             DigitaTexto(By.Id(id), valor);
         }
 
+        protected void DigitaTextoName(string id, string valor)
+        {
+            DigitaTexto(By.Name(id), valor);
+        }
+
         protected void DigitaTextoXPath(string xPath, string valor)
         {
             DigitaTexto(By.Id(xPath), valor);
@@ -75,7 +104,7 @@ namespace AEGF.Infra
         {
             if (aguardar)
                 Aguardar(seletor);
-            var query = driver.FindElement(seletor);            
+            var query = driver.FindElement(seletor);
             query.Click();
 
         }
@@ -113,6 +142,11 @@ namespace AEGF.Infra
             Aguardar(By.Id(id));
         }
 
+        protected void AguardarName(string id)
+        {
+            Aguardar(By.Name(id));
+        }
+        
         protected void AguardarXPath(string xPath)
         {
             Aguardar(By.XPath(xPath));
@@ -124,14 +158,28 @@ namespace AEGF.Infra
         }
 
 
-        protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 60)
+        protected void Aguardar(By seletor)
+        {
+            Aguardar(seletor, true, 60, false);
+        }
+
+        //protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 60)
+        //{
+        //    Aguardar(seletor, garantirHabilitado, segundos, false);
+        //}
+
+        protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 60, bool trocaPopUp = false)
         {
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(segundos));
-            
+
             wait.Until(webDriver =>
             {
                 try
                 {
+                    if (trocaPopUp)
+                        //FORÇA UM FOCO NO POPUP QUE ABRIU !!!!
+                        driver.SwitchTo().Window(driver.WindowHandles.ToList().Last());
+
                     var element = webDriver.FindElement(seletor);
                     var retorno = element != null;
                     if (garantirHabilitado)
@@ -157,13 +205,68 @@ namespace AEGF.Infra
             return Existe(By.XPath(xPath));
         }
 
-
         private bool Existe(By seletor)
         {
             try
             {
-                var elemento = driver.FindElement(seletor);
-                return elemento != null;
+                var element = driver.FindElement(seletor);
+                return element != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool VisivelId(string id)
+        {
+            return Visivel(By.Id(id));
+        }
+
+        public bool VisivelName(string id)
+        {
+            return Visivel(By.Name(id));
+        }
+
+        public bool VisivelXPath(string xPath)
+        {
+            return Visivel(By.XPath(xPath));
+        }
+
+        private bool Visivel(By seletor)
+        {
+            try
+            {
+                var element = driver.FindElement(seletor);
+                return element.Displayed;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool HabilitadoId(string id)
+        {
+            return Habilitado(By.Id(id));
+        }
+
+        public bool HabilitadoName(string id)
+        {
+            return Habilitado(By.Name(id));
+        }
+
+        public bool HabilitadoXPath(string xPath)
+        {
+            return Habilitado(By.XPath(xPath));
+        }
+
+        private bool Habilitado(By seletor)
+        {
+            try
+            {
+                var element = driver.FindElement(seletor);
+                return element.Displayed && element.Enabled;
             }
             catch (Exception)
             {
@@ -188,12 +291,19 @@ namespace AEGF.Infra
 
         public string LerTexto(By seletor)
         {
-            var elemento = driver.FindElement(seletor);
-            return elemento.Text;
-            
+            var element = driver.FindElement(seletor);
+            return element.Text;
+
         }
 
         protected abstract string URLSite();
+
+        public void Tempo(int segundos = 5)
+        {
+            // Site da CEF é temperamental, se for muito rápido ele dá erro
+            // dá uns 5 segundos de espera....
+            System.Threading.Thread.Sleep(new TimeSpan(0, 0, segundos));
+        }
 
 
         public IWebDriver driver { get; set; }
