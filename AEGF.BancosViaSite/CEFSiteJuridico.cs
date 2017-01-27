@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-//using System.Threading;
-//using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
 using AEGF.Infra;
@@ -45,85 +43,33 @@ namespace AEGF.BancosViaSite
         {
             Tempo();
 
-            // verifica se existe o carousel-home (menu carrossel no topo do site.... caso contrário o menu carrossel está no cetro da página
-            if (driver.FindElements(By.Id("carousel-home")).Count > 0)
-            {
-                var xpath = "//nav[@id='carousel-home']/ul/li[1]/a/img";
-                AguardarXPath(xpath);
-                ClicaXPath(xpath);
-                ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
-            }
-            else
-            {
-                #region CAROSSEL NO CENTRO DA PAGINA
-
-                //aguarda o carrossel central
-                try
-                {
-                    AguardarId("carrossel");
-                }
-                catch
-                {
-                    // às vezes está demorando para carregar o carrossel central.. daí dá exception.. tenta de novo!
-                    Tempo();
-                    AguardarId("carrossel");
-                }
-
-                //clica no botão MINHA CONTA
-                IList<IWebElement> linkMenu = driver.FindElements(By.Id("carrosselLista"))[0].FindElements(By.CssSelector("*"));
-                foreach (var item in linkMenu)
-                {
-                    try
-                    {
-                        if ((item.Text.ToUpper().Contains("CONTAS DA EMPRESA")) && (item.TagName == "div"))
-                        {
-                            while (!HabilitadoId("submenu"))
-                            {
-                                item.Click();
-                                Tempo();
-                            }
-                            break;
-                        }
-
-                    }
-                    catch { }
-                }
-
-                //clica no menu extrato por Periodo
-                AguardarId("submenu");
-
-                linkMenu = driver.FindElements(By.Id("submenu"))[0].FindElements(By.CssSelector("div"))[0].FindElements(By.CssSelector("*"));
-                foreach (var item in linkMenu)
-                {
-                    try
-                    {
-                        if ((item.Text.ToUpper().Contains("EXTRATO POR PERÍODO")) && (item.TagName == "a"))
-                        {
-                            item.Click();
-                            break;
-                        }
-
-                    }
-                    catch { }
-                }
-                #endregion
-            }
-            Tempo();
+            // pega o extrato mes atual
+            VaiParaSelecaoExtrato();
             SelecionaMesAtual();
             var numConta = LerNumeroConta();
             LerTabelaExtrato(numConta, DateTime.Today.PrimeiroDia());
             Tempo();
 
             // pega o extrato mes anterior
-            ClicaXPath("//nav[@id='carousel-internas']/div/ul/li[1]/a/img");
-            ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
-            Tempo();
+            VaiParaSelecaoExtrato();
             SelecionaMesAnterior();
             LerTabelaExtrato(numConta, DateTime.Today.AddMonths(-1).PrimeiroDia());
 
             // pega o extrato de cartão de débito (para localizar o estabelecimento da compra
-            ClicaXPath("//nav[@id='carousel-internas']/div/ul/li[5]/a/img");
-            ClicaXPath("(//div[contains(@class, 'floatdiv')])[2]/div[1]/a");
+            VaiParaSelecaoExtrato_CartaoDebito();
+
+        }
+
+        private void VaiParaSelecaoExtrato()
+        {
+            driver.Navigate().GoToUrl("https://internetbanking.caixa.gov.br/SIIBC/interna#!/extrato_periodo.processa");
+            Tempo();
+        }
+
+        private void VaiParaSelecaoExtrato_CartaoDebito()
+        {
+            //pega o extrato dos ultimos 15 dias
+            driver.Navigate().GoToUrl("https://internetbanking.caixa.gov.br/SIIBC/interna#!/extrato_compras.processa");
             Tempo();
 
             // salva extrato !

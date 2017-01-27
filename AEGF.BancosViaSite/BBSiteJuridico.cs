@@ -15,7 +15,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace AEGF.BancosViaSite
 {
-    public class BBSite : AcessoSelenium, IBancoAcesso
+    public class BBSiteJuridico : AcessoSelenium, IBancoAcesso
     {
         private Banco _banco;
         private ICollection<Extrato> _extratos;
@@ -257,7 +257,7 @@ namespace AEGF.BancosViaSite
 
         public string NomeUnico()
         {
-            return "BBSite";
+            return "BBSiteJuridico";
         }
 
         public void Iniciar(Banco banco)

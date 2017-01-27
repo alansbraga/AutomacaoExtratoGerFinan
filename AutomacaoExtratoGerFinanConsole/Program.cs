@@ -33,8 +33,8 @@ namespace AutomacaoExtratoGerFinanConsole
             var gerenciadorBanco = new GerenciadorBancoAcesso(repositorio);
 
             /*descomentar abaixo os bancos que você vai usar....*/
-            //gerenciadorBanco.AdicionaBancoAcesso(new SantanderSite());
-            //gerenciadorBanco.AdicionaBancoAcesso(new CetelemSite());
+            gerenciadorBanco.AdicionaBancoAcesso(new SantanderSite());
+            gerenciadorBanco.AdicionaBancoAcesso(new CetelemSite());
 
             gerenciadorBanco.AdicionaBancoAcesso(new CEFSiteFisico());
             gerenciadorBanco.AdicionaBancoAcesso(new CEFSiteJuridico());
