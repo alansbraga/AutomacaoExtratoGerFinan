@@ -16,18 +16,19 @@ using OpenQA.Selenium.Support.UI;
 
 namespace AEGF.BancosViaSite
 {
-    public class CEFSite: AcessoSelenium, IBancoAcesso
+    public class CEFSiteFisico : AcessoSelenium, IBancoAcesso
     {
         private Banco _banco;
         private ICollection<Extrato> _extratos;
 
+        /*
         protected override IWebDriver CriarBrowser()
         {
             var f = new FirefoxProfileManager();
             var p = f.GetProfile("default");
             
-            return new FirefoxDriver(p);            
-        }
+            return new FirefoxDriver();            
+        }*/
 
         public IEnumerable<Extrato> LerExtratos()
         {
@@ -35,7 +36,7 @@ namespace AEGF.BancosViaSite
             Inicio();
             FazerLogin();
             LerExtrato();
-            FecharBrowser();
+            Sair();
             return _extratos;
         }
 
@@ -43,20 +44,89 @@ namespace AEGF.BancosViaSite
         private void LerExtrato()
         {
             Tempo();
-            var xpath = "//nav[@id='carousel-home']/ul/li[1]/a/img";
-            AguardarXPath(xpath);
-            ClicaXPath(xpath);
-            ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
+
+            // verifica se existe o carousel-home (menu carrossel no topo do site.... caso contrário o menu carrossel está no cetro da página
+            if (driver.FindElements(By.Id("carousel-home")).Count > 0)
+            {
+                var xpath = "//nav[@id='carousel-home']/ul/li[1]/a/img";
+                AguardarXPath(xpath);
+                ClicaXPath(xpath);
+                ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
+            }
+            else
+            {
+                #region CAROSSEL NO CENTRO DA PAGINA
+
+                //aguarda o carrossel central
+                try
+                {
+                    AguardarId("carrossel");
+                }
+                catch
+                {
+                    // às vezes está demorando para carregar o carrossel central.. daí dá exception.. tenta de novo!
+                    Tempo();
+                    AguardarId("carrossel");
+                }
+
+                //clica no botão MINHA CONTA
+                IList<IWebElement> linkMenu = driver.FindElements(By.Id("carrosselLista"))[0].FindElements(By.CssSelector("*"));
+                foreach (var item in linkMenu)
+                {
+                    try
+                    {
+                        if ((item.Text.ToUpper().Contains("MINHA CONTA")) && (item.TagName == "div"))
+                        {
+                            item.Click();
+                            break;
+                        }
+
+                    }
+                    catch { }
+                }
+
+                //clica no menu extrato por Periodo
+                AguardarId("submenu");
+
+                linkMenu = driver.FindElements(By.Id("submenu"))[0].FindElements(By.CssSelector("div"))[0].FindElements(By.CssSelector("*"));
+                foreach (var item in linkMenu)
+                {
+                    try
+                    {
+                        if ((item.Text.ToUpper().Contains("EXTRATO POR PERÍODO")) && (item.TagName == "a"))
+                        {
+                            item.Click();
+                            break;
+                        }
+
+                    }
+                    catch { }
+                }
+                #endregion
+            }
             Tempo();
             SelecionaMesAtual();
             var numConta = LerNumeroConta();
             LerTabelaExtrato(numConta, DateTime.Today.PrimeiroDia());
             Tempo();
+
+            // pega o extrato mes anterior
             ClicaXPath("//nav[@id='carousel-internas']/div/ul/li[1]/a/img");
             ClicaXPath("(//div[contains(@class, 'floatdiv')])[1]/div[3]/a");
             Tempo();
             SelecionaMesAnterior();
             LerTabelaExtrato(numConta, DateTime.Today.AddMonths(-1).PrimeiroDia());
+
+            // pega o extrato de cartão de débito (para localizar o estabelecimento da compra
+            ClicaXPath("//nav[@id='carousel-internas']/div/ul/li[5]/a/img");
+            ClicaXPath("(//div[contains(@class, 'floatdiv')])[2]/div[1]/a");
+            Tempo();
+
+            // salva extrato !
+            string id = "salvar";
+            AguardarId(id);
+            ClicaId(id);
+
         }
 
         private string LerNumeroConta()
@@ -104,7 +174,7 @@ namespace AEGF.BancosViaSite
                     extrato.SaldoAnterior = BuscaValor(colunas, colValor + 1);
 
                 if (linhaAtual <= 3)
-                    continue;                
+                    continue;
 
                 if (colunas.Count < colValor)
                     continue;
@@ -135,7 +205,7 @@ namespace AEGF.BancosViaSite
             double valor;
 
             if (Double.TryParse(valorStr, out valor))
-            {                
+            {
                 if ((valor != 0) && (colunaValor[1] == "D"))
                     valor *= -1;
             }
@@ -150,9 +220,36 @@ namespace AEGF.BancosViaSite
 
         private void ConfirmaMesExtrato()
         {
-            const string id = "confirma";
+            // seleciona extrato atual
+            string id = "rdoTipoExtratoAtual";
             AguardarId(id);
             ClicaId(id);
+
+            // seleciona Gerar Arquivo para Gerenciadores Financeiros
+            id = "rdoFormatoExtratoArquivo";
+            AguardarId(id);
+            ClicaId(id);
+
+            // seleciona OFX
+            id = "rdoFormatoArquivoOfx";
+            AguardarId(id);
+            ClicaId(id);
+
+            // faz download do OFX
+            id = "confirma";
+            AguardarId(id);
+            ClicaId(id);
+
+            // volta à programação normal (mostra o extrato na tela!)
+            id = "rdoFormatoExtratoTela";
+            AguardarId(id);
+            ClicaId(id);
+
+            // abre a tela do extrato !
+            id = "confirma";
+            AguardarId(id);
+            ClicaId(id);
+
         }
 
         private void SelecionaMesAnterior()
@@ -169,13 +266,22 @@ namespace AEGF.BancosViaSite
 
         private void FazerLogin()
         {
-            
-            DigitaTextoId("usuario", _banco.LerConfiguracao("usuario"));
-            ClicaXPath("//*[@id=\"divPF\"]/input");
-            ClicaXPath("//*[@id=\"botaoAcessar\"]/button/span");
-            ClicaId("iniciais", true);
+            var usuarioid = "nomeUsuario";
+            AguardarId(usuarioid);
+            DigitaTextoId(usuarioid, _banco.LerConfiguracao("usuario"));
+
+            if (_banco.LerConfiguracao("tipo").ToUpper() == "FISICA")
+                ClicaId("tpPessoaFisica");
+            else
+                ClicaId("tpPessoaJuridica");
+
+            ClicaId("btnLogin");
+            //ClicaXPath("//*[@id=\"divPF\"]/input");
+            //ClicaXPath("//*[@id=\"botaoAcessar\"]/button/span");
+            Thread.Sleep(new TimeSpan(0, 0, 5));
+            ClicaId("lnkInitials", true);
             // Usuario tem que digitar a senha
-            AguardarXPath("//div[contains(@class, 'keyboard-button') and text()='a']");
+            AguardarXPath("//*[@id=\"teclado\"]/ul/li[contains(@class, 'key') and text()='a']");
 
             var senha = _banco.LerConfiguracao("senha");
 
@@ -183,18 +289,35 @@ namespace AEGF.BancosViaSite
             {
                 var elemento =
                     driver.FindElement(
-                        By.XPath(String.Format("//div[contains(@class, 'keyboard-button') and text()='{0}']", letra)));
+                        By.XPath(String.Format("//*[@id=\"teclado\"]/ul/li[contains(@class, 'key') and text()='{0}']", letra)));
                 Actions builder = new Actions(driver);
                 builder.MoveToElement(elemento).Click().Perform();
             }
+            ClicaId("btnConfirmar");
+            /*
             var botao =
                 driver.FindElement(
                     By.Id("85Confirm"));
             Actions acaoBotao = new Actions(driver);
-            acaoBotao.MoveToElement(botao).Click().Perform();
-           
+            acaoBotao.MoveToElement(botao).Click().Perform();*/
+
         }
 
+        private void Sair()
+        {
+            try
+            {
+                // realiza logoff da sessão!!!
+                driver.FindElements(By.ClassName("logoff"))[0].Click();
+                driver.FindElements(By.Id("btnSim"))[0].Click();
+            }
+            catch
+            {
+            }
+
+            // fecha o navegador.
+            FecharBrowser();
+        }
 
         private void Inicio()
         {
@@ -203,7 +326,7 @@ namespace AEGF.BancosViaSite
 
         public string NomeUnico()
         {
-            return "CEFSite";
+            return "CEFSiteFisico";
         }
 
         public void Iniciar(Banco banco)
