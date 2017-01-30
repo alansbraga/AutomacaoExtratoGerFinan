@@ -18,8 +18,42 @@
     },
     {
         "id": "2",
-        "descricao": "CEFSite",
-        "nomeAcesso": "CEFSite",
+        "descricao": "CEFSiteFisico",
+        "nomeAcesso": "CEFSiteFisico",
+        "configuracoes": [
+            {
+                "id": "1",
+                "nome": "usuario",
+                "valor": "seuusuario"
+            },
+            {
+                "id": "2",
+                "nome": "senha",
+                "valor":  "123456"
+            }
+        ]
+    },
+    {
+        "id": "3",
+        "descricao": "CEFSiteJuridico",
+        "nomeAcesso": "CEFSiteJuridico",
+        "configuracoes": [
+            {
+                "id": "1",
+                "nome": "usuario",
+                "valor": "seuusuario"
+            },
+            {
+                "id": "2",
+                "nome": "senha",
+                "valor":  "123456"
+            }
+        ]
+    },
+    {
+        "id": "4",
+        "descricao": "BanestesSite",
+        "nomeAcesso": "BanestesSite",
         "configuracoes": [
             {
                 "id": "1",

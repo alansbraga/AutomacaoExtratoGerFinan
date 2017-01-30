@@ -19,15 +19,6 @@ namespace AEGF.BancosViaSite
         private Banco _banco;
         private ICollection<Extrato> _extratos;
 
-        /*
-        protected override IWebDriver CriarBrowser()
-        {
-            var f = new FirefoxProfileManager();
-            var p = f.GetProfile("default");
-            
-            return new FirefoxDriver();            
-        }*/
-
         public IEnumerable<Extrato> LerExtratos()
         {
             IniciarBrowser();
@@ -211,17 +202,11 @@ namespace AEGF.BancosViaSite
             AguardarId(usuarioid);
             DigitaTextoId(usuarioid, _banco.LerConfiguracao("usuario"));
 
-            if (_banco.LerConfiguracao("tipo").ToUpper() == "FISICA")
-                ClicaId("tpPessoaFisica");
-            else
-                ClicaId("tpPessoaJuridica");
+            ClicaId("tpPessoaFisica");
 
             ClicaId("btnLogin");
-            //ClicaXPath("//*[@id=\"divPF\"]/input");
-            //ClicaXPath("//*[@id=\"botaoAcessar\"]/button/span");
             Tempo();
             ClicaId("lnkInitials", true);
-            // Usuario tem que digitar a senha
             AguardarXPath("//*[@id=\"teclado\"]/ul/li[contains(@class, 'key') and text()='a']");
 
             var senha = _banco.LerConfiguracao("senha");
@@ -235,12 +220,6 @@ namespace AEGF.BancosViaSite
                 builder.MoveToElement(elemento).Click().Perform();
             }
             ClicaId("btnConfirmar");
-            /*
-            var botao =
-                driver.FindElement(
-                    By.Id("85Confirm"));
-            Actions acaoBotao = new Actions(driver);
-            acaoBotao.MoveToElement(botao).Click().Perform();*/
 
         }
 
