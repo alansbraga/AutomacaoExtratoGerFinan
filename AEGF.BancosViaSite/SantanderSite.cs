@@ -356,13 +356,13 @@ namespace AEGF.BancosViaSite
             return "http://www.santander.com.br";
         }
 
-        protected override IWebDriver CriarBrowser()
-        {
-//            var f = new FirefoxProfileManager();
-//            var p = f.GetProfile("default");
+//        protected override IWebDriver CriarBrowser()
+//        {
+////            var f = new FirefoxProfileManager();
+////            var p = f.GetProfile("default");
 
-//            return new FirefoxDriver(p);
-            return base.CriarBrowser();
-        }
+////            return new FirefoxDriver(p);
+//            return base.CriarBrowser();
+//        }
     }
 }

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
 using AEGF.Infra;
@@ -16,7 +14,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace AEGF.BancosViaSite
 {
-    public class CEFSite: AcessoSelenium, IBancoAcesso
+    public class CEFSiteJuridico : AcessoSelenium, IBancoAcesso
     {
         private Banco _banco;
         private ICollection<Extrato> _extratos;
@@ -36,7 +34,7 @@ namespace AEGF.BancosViaSite
             Inicio();
             FazerLogin();
             LerExtrato();
-            FecharBrowser();
+            Sair();
             return _extratos;
         }
 
@@ -44,14 +42,22 @@ namespace AEGF.BancosViaSite
         private void LerExtrato()
         {
             Tempo();
+
+            // pega o extrato mes atual
             VaiParaSelecaoExtrato();
             SelecionaMesAtual();
             var numConta = LerNumeroConta();
             LerTabelaExtrato(numConta, DateTime.Today.PrimeiroDia());
             Tempo();
+
+            // pega o extrato mes anterior
             VaiParaSelecaoExtrato();
             SelecionaMesAnterior();
             LerTabelaExtrato(numConta, DateTime.Today.AddMonths(-1).PrimeiroDia());
+
+            // pega o extrato de cartão de débito (para localizar o estabelecimento da compra
+            VaiParaSelecaoExtrato_CartaoDebito();
+
         }
 
         private void VaiParaSelecaoExtrato()
@@ -60,15 +66,22 @@ namespace AEGF.BancosViaSite
             Tempo();
         }
 
+        private void VaiParaSelecaoExtrato_CartaoDebito()
+        {
+            //pega o extrato dos ultimos 15 dias
+            driver.Navigate().GoToUrl("https://internetbanking.caixa.gov.br/SIIBC/interna#!/extrato_compras.processa");
+            Tempo();
+
+            // salva extrato !
+            string id = "salvar";
+            AguardarId(id);
+            ClicaId(id);
+
+        }
+
         private string LerNumeroConta()
         {
             return LerTextoCSS("#contaSelecionada li.conta strong");
-        }
-
-        private void Tempo()
-        {
-            // Site da CEF é temperamental, se for muito rápido ele dá erro
-            Thread.Sleep(new TimeSpan(0, 0, 5));
         }
 
         private void LerTabelaExtrato(string numConta, DateTime referencia)
@@ -105,7 +118,7 @@ namespace AEGF.BancosViaSite
                     extrato.SaldoAnterior = BuscaValor(colunas, colValor + 1);
 
                 if (linhaAtual <= 3)
-                    continue;                
+                    continue;
 
                 if (colunas.Count < colValor)
                     continue;
@@ -136,7 +149,7 @@ namespace AEGF.BancosViaSite
             double valor;
 
             if (Double.TryParse(valorStr, out valor))
-            {                
+            {
                 if ((valor != 0) && (colunaValor[1] == "D"))
                     valor *= -1;
             }
@@ -146,15 +159,41 @@ namespace AEGF.BancosViaSite
 
         private void SelecionaMesAtual()
         {
-            ClicaXPath("//label[@for='rdoTipoExtratoAtual']", true);
             ConfirmaMesExtrato();
         }
 
         private void ConfirmaMesExtrato()
         {
-            const string id = "confirma";
+            // seleciona extrato atual
+            string id = "rdoTipoExtratoAtual";
             AguardarId(id);
             ClicaId(id);
+
+            // seleciona Gerar Arquivo para Gerenciadores Financeiros
+            id = "rdoFormatoExtratoArquivo";
+            AguardarId(id);
+            ClicaId(id);
+
+            // seleciona OFX
+            id = "rdoFormatoArquivoOfx";
+            AguardarId(id);
+            ClicaId(id);
+
+            // faz download do OFX
+            id = "confirma";
+            AguardarId(id);
+            ClicaId(id);
+
+            // volta à programação normal (mostra o extrato na tela!)
+            id = "rdoFormatoExtratoTela";
+            AguardarId(id);
+            ClicaId(id);
+
+            // abre a tela do extrato !
+            id = "confirma";
+            AguardarId(id);
+            ClicaId(id);
+
         }
 
         private void SelecionaMesAnterior()
@@ -174,12 +213,20 @@ namespace AEGF.BancosViaSite
             var usuarioid = "nomeUsuario";
             AguardarId(usuarioid);
             DigitaTextoId(usuarioid, _banco.LerConfiguracao("usuario"));
-            ClicaId("tpPessoaFisica");
+
+            if (_banco.LerConfiguracao("tipo").ToUpper() == "FISICA")
+                ClicaId("tpPessoaFisica");
+            else
+                ClicaId("tpPessoaJuridica");
+
             ClicaId("btnLogin");
-            Thread.Sleep(new TimeSpan(0, 0, 5));
+            //ClicaXPath("//*[@id=\"divPF\"]/input");
+            //ClicaXPath("//*[@id=\"botaoAcessar\"]/button/span");
+            Tempo();
             ClicaId("lnkInitials", true);
+            // Usuario tem que digitar a senha
             AguardarXPath("//*[@id=\"teclado\"]/ul/li[contains(@class, 'key') and text()='a']");
-            
+
             var senha = _banco.LerConfiguracao("senha");
 
             foreach (var letra in senha)
@@ -191,8 +238,30 @@ namespace AEGF.BancosViaSite
                 builder.MoveToElement(elemento).Click().Perform();
             }
             ClicaId("btnConfirmar");
+            /*
+            var botao =
+                driver.FindElement(
+                    By.Id("85Confirm"));
+            Actions acaoBotao = new Actions(driver);
+            acaoBotao.MoveToElement(botao).Click().Perform();*/
+
         }
 
+        private void Sair()
+        {
+            try
+            {
+                // realiza logoff da sessão!!!
+                driver.FindElements(By.ClassName("logoff"))[0].Click();
+                driver.FindElements(By.Id("btnSim"))[0].Click();
+            }
+            catch
+            {
+            }
+
+            // fecha o navegador.
+            FecharBrowser();
+        }
 
         private void Inicio()
         {
@@ -201,7 +270,7 @@ namespace AEGF.BancosViaSite
 
         public string NomeUnico()
         {
-            return "CEFSite";
+            return "CEFSiteJuridico";
         }
 
         public void Iniciar(Banco banco)
