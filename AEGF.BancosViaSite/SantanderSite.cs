@@ -303,7 +303,7 @@ namespace AEGF.BancosViaSite
             VaiParaFramePrincipal();
             TrocaFrameNome("MainFrame");
 
-            var idPopup = "splash-10000-close-button";
+            var idPopup = "splash-10000-remind-me-later";
             Thread.Sleep(new TimeSpan(0, 0, 5));
             if (ExisteId(idPopup))
                 ClicaId(idPopup);
