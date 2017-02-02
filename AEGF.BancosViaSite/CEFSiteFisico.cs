@@ -45,25 +45,11 @@ namespace AEGF.BancosViaSite
             VaiParaSelecaoExtrato();
             SelecionaMesAnterior();
             LerTabelaExtrato(numConta, DateTime.Today.AddMonths(-1).PrimeiroDia());
-
-            // pega o extrato de cartão de débito (para localizar o estabelecimento da compra
-            VaiParaSelecaoExtrato_CartaoDebito();
-
-            // salva extrato !
-            string id = "salvar";
-            AguardarId(id);
-            ClicaId(id);
         }
 
         private void VaiParaSelecaoExtrato()
         {
             driver.Navigate().GoToUrl("https://internetbanking.caixa.gov.br/SIIBC/interna#!/extrato_periodo.processa");
-            Tempo();
-        }
-
-        private void VaiParaSelecaoExtrato_CartaoDebito()
-        {
-            driver.Navigate().GoToUrl("https://internetbanking.caixa.gov.br/SIIBC/interna#!/extrato_compras.processa");
             Tempo();
         }
 
@@ -147,38 +133,13 @@ namespace AEGF.BancosViaSite
 
         private void SelecionaMesAtual()
         {
+            ClicaXPath("//label[@for='rdoTipoExtratoAtual']", true);
             ConfirmaMesExtrato();
         }
 
         private void ConfirmaMesExtrato()
         {
-            // seleciona extrato atual
-            string id = "rdoTipoExtratoAtual";
-            AguardarId(id);
-            ClicaId(id);
-
-            // seleciona Gerar Arquivo para Gerenciadores Financeiros
-            id = "rdoFormatoExtratoArquivo";
-            AguardarId(id);
-            ClicaId(id);
-
-            // seleciona OFX
-            id = "rdoFormatoArquivoOfx";
-            AguardarId(id);
-            ClicaId(id);
-
-            // faz download do OFX
-            id = "confirma";
-            AguardarId(id);
-            ClicaId(id);
-
-            // volta à programação normal (mostra o extrato na tela!)
-            id = "rdoFormatoExtratoTela";
-            AguardarId(id);
-            ClicaId(id);
-
-            // abre a tela do extrato !
-            id = "confirma";
+            const string id = "confirma";
             AguardarId(id);
             ClicaId(id);
 
