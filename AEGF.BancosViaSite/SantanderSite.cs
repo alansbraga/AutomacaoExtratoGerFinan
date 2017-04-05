@@ -304,7 +304,8 @@ namespace AEGF.BancosViaSite
             TrocaFrameNome("MainFrame");
 
             var idPopup = "splash-10000-remind-me-later";
-            Thread.Sleep(new TimeSpan(0, 0, 5));
+            // Próxima vez alterar o id para texto "Lembrar mais tarde" acho q isso não muda
+            Tempo();
             if (ExisteId(idPopup))
                 ClicaId(idPopup);
         }
