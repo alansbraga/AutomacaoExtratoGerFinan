@@ -28,29 +28,29 @@ namespace AEGF.BancosViaSite
             FazerLogin();
             FecharAvisos();
             LerExtrato();
-            LerCartoes();
+            //LerCartoes();
             FecharBrowser();
             return _extratos;
         }
 
         private void FecharAvisos()
         {
-            FecharAvisoFimDeAno();
+            FecharTutorial();
         }
 
-        private void FecharAvisoFimDeAno()
-        {
-            VaiParaCorpo();
-            if (ExisteId("FloaterAvisoCartao"))
-            {
-                TrocaFrameId("FloaterAvisoCartao");
-                ClicaXPath("//*[@id=\"fimdeano\"]/area");
-            }
-            VaiParaFramePrincipal();
+        private void FecharTutorial()
+        {               
+            var xpath = "/html/body/div[11]/div/div[2]/a";
+            Tempo();
+            if (ExisteXPath(xpath))
+                ClicaXPath(xpath);
         }
 
         private void LerCartoes()
         {
+            ClicaId("cartoes");            
+            ClicaXPath("//*[@id=\"subMenu - cartoes\"]//a[text() = 'Consultar faturas']");
+
             do
             {
                 _cartaoAtual++;
@@ -139,17 +139,17 @@ namespace AEGF.BancosViaSite
 
         private void LerExtrato()
         {
-            SelecionaPeriodo();
+            ClicaId("ctacorrente");
+            ClicaXPath("//*[@id=\"subMenu-ctacorrente\"]//a[text() = 'Extrato Conta Corrente']");
+            ClicaXPath("//a[@id=\"daterange7\" and text() = '30 dias' ]");
+
             LerTabelaExtrato();
         }
 
         private void LerTabelaExtrato()
         {
             var numeroConta = BuscaNumeroConta();
-
-            VaiParaIFramePrinc();
-            TrocaFrameXPath("//*[@id=\"extrato\"]");
-            var extrato = CriaRetorno("table.lista tr.trClaro", false, 0, 2, 5);
+            var extrato = CriaExtratoCC();
             BuscaSaldo(extrato);
             extrato.Referencia = DateTime.MinValue; // Sem referência para que o resumo fique sempre mostrando os novos registros
             extrato.Descricao = "Santander Conta Corrente " + numeroConta;
@@ -157,29 +157,70 @@ namespace AEGF.BancosViaSite
 
         }
 
+        private Extrato CriaExtratoCC()
+        {
+            var cssPath = "div.extrato-table.tabla_datos.margin_bottom_standard.extrato-table-fix > table > tbody > tr";
+            AguardarCSS(cssPath);
+            var trs = driver.FindElements(By.CssSelector(cssPath));
+            var retorno = new Extrato { CartaoCredito = false };
+
+            AdicionaItensCC(retorno, trs);
+
+            return retorno;
+        }
+
+        private void AdicionaItensCC(Extrato extrato, ReadOnlyCollection<IWebElement> linhas)
+        {
+            foreach (var linha in linhas)
+            {
+                var colunas = linha.FindElements(By.TagName("td"));
+                var valorStr = colunas[2].Text;
+                if (string.IsNullOrWhiteSpace(valorStr))
+                {
+                    valorStr = colunas[3].Text;
+                }
+                valorStr = valorStr.Trim();
+                if (!Double.TryParse(valorStr, out double valor))
+                    continue;
+                var descricao = colunas[1].Text;
+
+                valorStr = colunas[4].Text;
+                Double.TryParse(valorStr, out double saldo);
+
+
+                var mes = colunas[0].FindElement(By.ClassName("month-format")).Text;
+                var dia = colunas[0].FindElement(By.ClassName("day-format")).Text;
+                var data = DateTime.Parse($"{dia}/{mes}/{DateTime.Now.Year}");
+                if (data > DateTime.Now)
+                    data = data.AddYears(-1);
+
+                var item = new Transacao
+                {
+                    Valor = valor,
+                    Descricao = descricao,
+                    Data = data,
+                    Saldo = saldo
+                };
+                extrato.AdicionaTransacao(item);
+            }
+        }
+
         private void BuscaSaldo(Extrato extrato)
         {
-            var trs = driver.FindElements(By.CssSelector("table.lista tr.trClaro"));
-            var colunas = trs[0].FindElements(By.TagName("td"));
+            var tr = extrato.Transacoes.FirstOrDefault();
+            if (tr == null)
+                return;
 
-            var valorStr = colunas[6].Text;
-            double valor;
-
-            if (Double.TryParse(valorStr, out valor))
-            {
-                extrato.SaldoAnterior = valor;
-            }
+            extrato.SaldoAnterior = tr.Saldo + tr.Valor;
         }
 
         private string BuscaNumeroConta()
         {
-            VaiParaCorpo();
-            var numeroConta = driver.FindElement(By.XPath("//*[@id=\"ola\"]/table/tbody/tr/td[2]")).Text;
-            numeroConta = new Regex("Conta: +([0-9.]+)").Match(numeroConta).Groups[1].Value;
+            var numeroConta = LerTextoCSS("#\\30 > div.contract-info > div > span:nth-child(4)");
             return numeroConta;
         }
 
-        private Extrato CriaRetorno(string cssPath, bool tipoCartao, int colData, int colDescricao, int colValor)
+        private Extrato CriaRetorno(string cssPath, bool tipoCartao, int colData, int colDescricao, int colValor, int colValor2 = -1)
         {
             AguardarCSS(cssPath);
             var trs = driver.FindElements(By.CssSelector(cssPath));
@@ -254,7 +295,7 @@ namespace AEGF.BancosViaSite
                     return valor;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
             return 0;
@@ -266,26 +307,13 @@ namespace AEGF.BancosViaSite
             TrocaFrameXPath("//*[@id=\"iframePrinc\"]");
         }
 
-        private void SelecionaPeriodo()
-        {
-            VaiParaCorpo();
-            TrocaFrameXPath("//*[@id=\"iframePainel\"]");
-            SelecionaValorXPath("//*[@id=\"select\"]/select", "30");
-            ClicaXPath("//*[@id=\"extrato\"]/tbody/tr/td[3]/a", true);
-        }
 
         private void FazerLogin()
         {
-            //TrocaFrameId("iframetopo");
-
-            DigitaTextoId("cfp", _banco.LerConfiguracao("CPF") /*_banco.Configuracoes.Single(configuracao => configuracao.Nome == "CPF").Valor*/);
+            DigitaTextoId("cfp", _banco.LerConfiguracao("CPF"));
             ClicaXPath("//*[@id=\"formularioFisica\"]/fieldset/ul/li[2]/input");
-            FechaMensagemPlugin();
-
-            DigitaTextoId("txtSenha", _banco.LerConfiguracao("Senha")/*_banco.Configuracoes.Single(configuracao => configuracao.Nome == "Senha").Valor*/);
-            ClicaXPath("//*[@id=\"divBotoes\"]/a[1]");
-            FechaMensagemSenhaTelefone();
-            FechaMensagemNovoSite();
+            DigitaTextoId("senha", _banco.LerConfiguracao("Senha"));
+            ClicaXPath("//div[contains(@class, 'form-group')]//input[@id='Entrar']");
         }
 
 

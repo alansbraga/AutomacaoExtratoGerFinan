@@ -114,7 +114,7 @@ namespace AEGF.GFViaSite
                 Thread.Sleep(new TimeSpan(0, 0, 5));
                 ClicaXPath(id);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Thread.Sleep(new TimeSpan(0, 0, 10));
                 ClicaXPath(id);
