@@ -20,6 +20,7 @@ namespace AEGF.Dominio.Servicos
 
         public void CriarResumo(string arquivoSaida, IEnumerable<Extrato> extratos, IEnumerable<Exception> erros)
         {
+            extratos = extratos.OrderBy(e => e.Referencia).ThenBy(e => e.Descricao);
             VerificarNovosRegistros(extratos);
             _formatador.Formatar(arquivoSaida, extratos, erros);
         }

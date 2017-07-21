@@ -35,7 +35,16 @@ namespace AEGF.BancosViaSite
 
         private void FecharAvisos()
         {
+            FecharSejaBemVindo();
             FecharTutorial();
+        }
+
+        private void FecharSejaBemVindo()
+        {
+            const string xpath = "//*[@id=\"navbar\"]/div[2]/a";
+            Tempo();
+            if (ExisteXPath(xpath))
+                ClicaXPath(xpath);
         }
 
         private void FecharTutorial()
@@ -144,6 +153,7 @@ namespace AEGF.BancosViaSite
             ClicaId("ctacorrente");
             ClicaXPath("//*[@id=\"subMenu-ctacorrente\"]//a[text() = 'Extrato Conta Corrente']");
             ClicaXPath("//a[@id=\"daterange7\" and text() = '30 dias' ]");
+            Tempo();
 
             LerTabelaExtrato();
         }
@@ -213,7 +223,7 @@ namespace AEGF.BancosViaSite
             if (tr == null)
                 return;
 
-            extrato.SaldoAnterior = tr.Saldo + tr.Valor;
+            extrato.SaldoAnterior = tr.Saldo - tr.Valor;
         }
 
         private string BuscaNumeroConta()
