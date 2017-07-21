@@ -35,121 +35,123 @@ namespace AEGF.BancosViaSite
 
         private void FecharAvisos()
         {
-            FecharAvisoFimDeAno();
+            FecharTutorial();
         }
 
-        private void FecharAvisoFimDeAno()
+        private void FecharTutorial()
         {
-            VaiParaCorpo();
-            if (ExisteId("FloaterAvisoCartao"))
-            {
-                TrocaFrameId("FloaterAvisoCartao");
-                ClicaXPath("//*[@id=\"fimdeano\"]/area");
-            }
-            VaiParaFramePrincipal();
+            const string xpath = "/html/body/div[11]/div/div[2]/a";
+            Tempo();
+            if (ExisteXPath(xpath))
+                ClicaXPath(xpath);
         }
 
         private void LerCartoes()
         {
-            do
+            ClicaId("cartoes");
+            ClicaXPath("//*[@id=\"subMenu-cartoes\"]//a[text() = 'Consultar faturas']");
+            var primeiro = LerTextoXPath("//div[@class='contract-account']//span[2]");
+            var cartoesDisponiveis = driver.FindElements(By.XPath("//*[@id=\"accountIndexCartoes\"]/ul/li"))
+                .Select(i => new {
+                    Nome = i.FindElement(By.TagName("div")).GetAttribute("data-creditcard-number"),
+                    Item = i
+                }).ToList();
+            var primeiroCartao = cartoesDisponiveis
+                .First(a => a.Nome == primeiro);
+            cartoesDisponiveis.Remove(primeiroCartao);
+
+            LerCartao(primeiroCartao.Nome, primeiroCartao.Item);
+            foreach (var cartao in cartoesDisponiveis)
             {
-                _cartaoAtual++;
-                ClicaFatura();
-            } while (LerCartaoAtual());
+                ClicaCartao(cartao.Item);
+                LerCartao(cartao.Nome, cartao.Item);
+            }
         }
 
-        private bool LerCartaoAtual()
+        private void LerCartao(string nome, IWebElement cartao)
         {
-            VaiParaIFramePrinc();
-            var trs = driver.FindElements(By.CssSelector("table.lista tr.trClaro"));
-            if (_cartaoAtual > (trs.Count - 1))
-                return false;
+            Tempo(3);
+            ClicaXPath("//div[@class = 'pestanas']//a[text() = 'Fatura em aberto']");
+            LerTabelaCartao(nome);
+            ClicaXPath("//div[@class = 'pestanas']//a[contains(@class,'fechada_max')]");
+            LerTabelaCartao(nome);
+        }
 
-            var linha = trs[_cartaoAtual];
-            var colunas = linha.FindElements(By.TagName("td"));
-
-            var link = colunas[1].FindElement(By.TagName("a"));
-            link.Click();
-
-            var segunda = false;
-            do
+        private void LerTabelaCartao(string nome)
+        {
+            var cotacaoDolar = BuscaCotacaoDolar();
+            var trs = driver.FindElements(By.XPath("//div[@class = 'tabla_datos']/table/tbody/tr[not(contains(@class, 'cabecera2'))]"));
+            var labelVencimento = driver.FindElement(By.XPath("//span[contains(@class, 'left') and text() = 'Data de vencimento:']"));
+            var vencimento = labelVencimento.FindElement(By.XPath("../span[contains(@class, 'right')]"));
+            if (!DateTime.TryParse(vencimento.Text.Trim(), out var dataVencimento))
+                dataVencimento = DateTime.MinValue;
+            var extrato = new Extrato
             {
-                VaiParaIFramePrinc();
-                FechaPostIt();
-                
-
-                var tds = driver.FindElements(By.CssSelector("div.caixa td.bold"));
-                var conta = tds[2].Text;
-                conta = conta.Replace("XXXX XXXX XXXX", "Final");
-                var descricao = String.Format("{0} - {1}", tds[0].Text, conta);
-
-                TrocaFrameId("iDetalhes");
-
-
-                if (!FaturaAcabouDeFechar())
+                CartaoCredito = true,
+                Descricao = $"Final {nome}",
+                Referencia = dataVencimento
+            };
+            foreach (var tr in trs)
+            {
+                var colunas = tr.FindElements(By.TagName("td"));
+                var transacao = new Transacao
                 {
-                    var extrato = CriaRetorno("#detfatura tr.trClaro", true, 0, 1, 2);
-                    extrato.Descricao = descricao;
-                    _extratos.Add(extrato);
+                    Descricao = colunas[1].Text.Trim()
+                };
+
+                if (!DateTime.TryParse(colunas[0].Text.Trim(), out var data))
+                    continue;
+                transacao.Data = data;
+
+                var strValor = colunas[3].Text.Trim();
+                var multiplicador = 1.0;
+                if (string.IsNullOrWhiteSpace(strValor))
+                {
+                    multiplicador = cotacaoDolar;
+                    strValor = colunas[2].Text.Trim();
                 }
 
-                if (!segunda)
-                {
-                    VaiParaIFramePrinc();
-                    SelecionaIndexXPath("//*[@id=\"cboFatura\"]", 2);
-                    ClicaXPath("//*[@id=\"frmFatura\"]/div[7]/fieldset/a");
-                    
-                    
-                    segunda = true;
-                }
-                else
-                {
-                    segunda = false;
-                }
-            } while (segunda);
-            return true;
+                if (!Double.TryParse(strValor, out var valor))
+                    continue;
+                transacao.Valor = valor * multiplicador;
+
+
+                extrato.AdicionaTransacao(transacao);
+            }
+            if (extrato.Transacoes.Any())
+                _extratos.Add(extrato);
         }
 
-        private bool FaturaAcabouDeFechar()
+        private double BuscaCotacaoDolar()
         {
-            return ExisteXPath("/html/body/div[1]/p");
+            Tempo(4);
+            var trs = driver.FindElements(By.XPath("//table[contains(@class, 'doble') and contains(@class, 'derecha')]//tr"));
+            var tds = trs[2].FindElements(By.TagName("td"));
+            if (!Double.TryParse(tds[1].GetAttribute("textContent").Trim(), out var valor))
+                valor = 1;
+            return valor;
+
         }
 
-        private void FechaPostIt()
+        private void ClicaCartao(IWebElement cartao)
         {
-            ClicaXPath("//*[@id=\"divPostIt\"]/table/tbody/tr[1]/td/a/img");
-        }
-
-        private void ClicaFatura()
-        {
-            VaiParaMenu();
-            ClicaXPath("//*[@id=\"3975Link\"]", true);
-            driver.SwitchTo().DefaultContent();
-            VaiParaCorpo();
-            ClicaXPath("//*[@id=\"montaMenu\"]/ul/li[1]/ul/li[2]/a", true);
-        }
-
-
-        private void VaiParaMenu()
-        {
-            driver.SwitchTo().DefaultContent();
-            VaiParaFramePrincipal();
-            TrocaFrameXPath("//*[@id=\"frameMain\"]/frame[1]", true);
+            ClicaXPath("//i[contains(@class, 'selector-choose-item') and contains(@class, 'credit-card-choose-icon')]");
+            cartao.Click();
         }
 
         private void LerExtrato()
         {
-            SelecionaPeriodo();
+            ClicaId("ctacorrente");
+            ClicaXPath("//*[@id=\"subMenu-ctacorrente\"]//a[text() = 'Extrato Conta Corrente']");
+            ClicaXPath("//a[@id=\"daterange7\" and text() = '30 dias' ]");
+
             LerTabelaExtrato();
         }
 
         private void LerTabelaExtrato()
         {
             var numeroConta = BuscaNumeroConta();
-
-            VaiParaIFramePrinc();
-            TrocaFrameXPath("//*[@id=\"extrato\"]");
-            var extrato = CriaRetorno("table.lista tr.trClaro", false, 0, 2, 5);
+            var extrato = CriaExtratoCC();
             BuscaSaldo(extrato);
             extrato.Referencia = DateTime.MinValue; // Sem referência para que o resumo fique sempre mostrando os novos registros
             extrato.Descricao = "Santander Conta Corrente " + numeroConta;
@@ -157,197 +159,77 @@ namespace AEGF.BancosViaSite
 
         }
 
-        private void BuscaSaldo(Extrato extrato)
+        private Extrato CriaExtratoCC()
         {
-            var trs = driver.FindElements(By.CssSelector("table.lista tr.trClaro"));
-            var colunas = trs[0].FindElements(By.TagName("td"));
-
-            var valorStr = colunas[6].Text;
-            double valor;
-
-            if (Double.TryParse(valorStr, out valor))
-            {
-                extrato.SaldoAnterior = valor;
-            }
-        }
-
-        private string BuscaNumeroConta()
-        {
-            VaiParaCorpo();
-            var numeroConta = driver.FindElement(By.XPath("//*[@id=\"ola\"]/table/tbody/tr/td[2]")).Text;
-            numeroConta = new Regex("Conta: +([0-9.]+)").Match(numeroConta).Groups[1].Value;
-            return numeroConta;
-        }
-
-        private Extrato CriaRetorno(string cssPath, bool tipoCartao, int colData, int colDescricao, int colValor)
-        {
+            const string cssPath = "div.extrato-table.tabla_datos.margin_bottom_standard.extrato-table-fix > table > tbody > tr";
             AguardarCSS(cssPath);
             var trs = driver.FindElements(By.CssSelector(cssPath));
-            var retorno = new Extrato { CartaoCredito = tipoCartao };
+            var retorno = new Extrato { CartaoCredito = false };
 
-            AdicionaItens(retorno, trs, colData, colDescricao, colValor);
-
-            if (retorno.CartaoCredito)
-            {
-                try
-                {
-                    retorno.Referencia = DateTime.Parse(driver.FindElement(By.CssSelector("table.transacao strong")).Text);
-                }
-                catch(Exception)
-                {
-                    // quando não há movimentos
-                }
-                
-            }
+            AdicionaItensCC(retorno, trs);
 
             return retorno;
         }
 
-        private void AdicionaItens(Extrato extrato, ReadOnlyCollection<IWebElement> linhas, int colData, int colDescricao, int colValor)
+        private static void AdicionaItensCC(Extrato extrato, ReadOnlyCollection<IWebElement> linhas)
         {
-            double valorDolar = CriaValorDolar(extrato);
-
             foreach (var linha in linhas)
             {
-                var dolar = false;
                 var colunas = linha.FindElements(By.TagName("td"));
-
-                var valorStr = colunas[colValor].Text;
-                double valor;
-
-                if (!Double.TryParse(valorStr, out valor)) 
-                    continue;
-                if (valor == 0 && extrato.CartaoCredito)
+                var valorStr = colunas[2].Text;
+                if (string.IsNullOrWhiteSpace(valorStr))
                 {
-                    valorStr = colunas[colValor + 1].Text;
-                    if (Double.TryParse(valorStr, out valor))
-                    {
-                        valor = valor*valorDolar;
-                        valor = Math.Round(valor, 2);
-                        dolar = true;
-                    }
-                        
+                    valorStr = colunas[3].Text;
                 }
-                var descricao = colunas[colDescricao].Text;
-                if (dolar)
-                    descricao += String.Format(" [Dolar: {0}]", valorDolar);
+                valorStr = valorStr.Trim();
+                if (!Double.TryParse(valorStr, out double valor))
+                    continue;
+                var descricao = colunas[1].Text;
+
+                valorStr = colunas[4].Text;
+                Double.TryParse(valorStr, out double saldo);
+
+
+                var mes = colunas[0].FindElement(By.ClassName("month-format")).Text;
+                var dia = colunas[0].FindElement(By.ClassName("day-format")).Text;
+                var data = DateTime.Parse($"{dia}/{mes}/{DateTime.Now.Year}");
+                if (data > DateTime.Now)
+                    data = data.AddYears(-1);
+
                 var item = new Transacao
                 {
                     Valor = valor,
                     Descricao = descricao,
-                    Data = DateTime.Parse(colunas[colData].Text)
+                    Data = data,
+                    Saldo = saldo
                 };
                 extrato.AdicionaTransacao(item);
             }
         }
 
-        private double CriaValorDolar(Extrato extrato)
+        private static void BuscaSaldo(Extrato extrato)
         {
-            if (!extrato.CartaoCredito)
-                return 0;
-            try
-            {
-                var valorStr = driver.FindElement(By.XPath("//*[@id=\"resdespbra\"]/table/tbody/tr[1]/td[3]/table/tbody/tr[4]/td[2]/strong")).Text;
-                double valor;
-                if (Double.TryParse(valorStr, out valor))
-                {
-                    return valor;
-                }
-            }
-            catch (Exception e)
-            {
-            }
-            return 0;
+            var tr = extrato.Transacoes.FirstOrDefault();
+            if (tr == null)
+                return;
+
+            extrato.SaldoAnterior = tr.Saldo + tr.Valor;
         }
 
-        private void VaiParaIFramePrinc()
+        private string BuscaNumeroConta()
         {
-            VaiParaCorpo();
-            TrocaFrameXPath("//*[@id=\"iframePrinc\"]");
-        }
-
-        private void SelecionaPeriodo()
-        {
-            VaiParaCorpo();
-            TrocaFrameXPath("//*[@id=\"iframePainel\"]");
-            SelecionaValorXPath("//*[@id=\"select\"]/select", "30");
-            ClicaXPath("//*[@id=\"extrato\"]/tbody/tr/td[3]/a", true);
+            var numeroConta = LerTextoCSS("#\\30 > div.contract-info > div > span:nth-child(4)");
+            return numeroConta;
         }
 
         private void FazerLogin()
         {
-            //TrocaFrameId("iframetopo");
-
-            DigitaTextoId("cfp", _banco.LerConfiguracao("CPF") /*_banco.Configuracoes.Single(configuracao => configuracao.Nome == "CPF").Valor*/);
+            DigitaTextoId("cfp", _banco.LerConfiguracao("CPF"));
             ClicaXPath("//*[@id=\"formularioFisica\"]/fieldset/ul/li[2]/input");
-            FechaMensagemPlugin();
-
-            DigitaTextoId("txtSenha", _banco.LerConfiguracao("Senha")/*_banco.Configuracoes.Single(configuracao => configuracao.Nome == "Senha").Valor*/);
-            ClicaXPath("//*[@id=\"divBotoes\"]/a[1]");
-            FechaMensagemSenhaTelefone();
-            FechaMensagemNovoSite();
+            DigitaTextoId("senha", _banco.LerConfiguracao("Senha"));
+            ClicaXPath("//div[contains(@class, 'form-group')]//input[@id='Entrar']");
         }
 
-
-        private void FechaMensagemNovoSite()
-        {
-            VaiParaCorpo();
-            if (ExisteId("conviteNWM"))
-            {
-                TrocaFrameId("conviteNWM");
-                ClicaXPath("//area[@title=\"Fechar\"]");
-            }
-            VaiParaFramePrincipal();
-        }
-
-        private void FechaMensagemSenhaTelefone()
-        {
-            VaiParaCorpo();
-            if (ExisteId("FloaterAlertaAviso"))
-            {
-                TrocaFrameId("FloaterAlertaAviso");
-                ClicaXPath("//*[@id=\"alertaAviso\"]/area");
-            }
-            VaiParaFramePrincipal();
-        }
-
-        private void FechaMensagemPlugin()
-        {
-            VaiParaFramePrincipal();
-            TrocaFrameNome("MainFrame");
-
-            var idPopup = "splash-10000-remind-me-later";
-            // Próxima vez alterar o id para texto "Lembrar mais tarde" acho q isso não muda
-            Tempo();
-            if (ExisteId(idPopup))
-                ClicaId(idPopup);
-        }
-
-
-        private void VaiParaFramePrincipal()
-        {
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            wait.Until(webDriver =>
-            {
-                try
-                {
-                    webDriver.SwitchTo().DefaultContent();
-                    return webDriver.FindElement(By.Id("frmSet")) != null;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            });
-            TrocaFrameXPath("//*[@id=\"frmSet\"]/frame[2]");
-        }
-
-        private void VaiParaCorpo()
-        {
-            VaiParaFramePrincipal();
-            TrocaFrameXPath("//*[@id=\"frameMain\"]/frame[2]", true);
-            
-        }
 
         private void Inicio()
         {
@@ -357,7 +239,7 @@ namespace AEGF.BancosViaSite
 
         public string NomeUnico()
         {
-            return "SantanderSite";
+            return nameof(SantanderSite);
         }
 
         public void Iniciar(Banco banco)
@@ -370,13 +252,5 @@ namespace AEGF.BancosViaSite
             return "http://www.santander.com.br";
         }
 
-//        protected override IWebDriver CriarBrowser()
-//        {
-////            var f = new FirefoxProfileManager();
-////            var p = f.GetProfile("default");
-
-////            return new FirefoxDriver(p);
-//            return base.CriarBrowser();
-//        }
     }
 }
