@@ -103,6 +103,10 @@ namespace AEGF.BancosViaSite
             foreach (var tr in trs)
             {
                 var colunas = tr.FindElements(By.TagName("td"));
+
+                if (colunas.Count < 4)
+                    continue;
+
                 var transacao = new Transacao
                 {
                     Descricao = colunas[1].Text.Trim()
