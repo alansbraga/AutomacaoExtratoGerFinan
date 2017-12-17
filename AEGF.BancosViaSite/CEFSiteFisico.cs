@@ -134,6 +134,7 @@ namespace AEGF.BancosViaSite
         private void SelecionaMesAtual()
         {
             ClicaXPath("//label[@for='rdoTipoExtratoAtual']", true);
+            AguardarLoadingSumir();
             ConfirmaMesExtrato();
         }
 
@@ -142,6 +143,7 @@ namespace AEGF.BancosViaSite
             const string id = "confirma";
             AguardarId(id);
             ClicaId(id);
+            AguardarLoadingSumir();
 
         }
 
@@ -150,25 +152,34 @@ namespace AEGF.BancosViaSite
             const string id = "rdoTipoExtratoOutro";
             AguardarId(id);
             ClicaId(id);
-            Tempo();
+            AguardarLoadingSumir();
             ClicaXPath("//*[@id=\"dk_container_sltOutroMes\"]/a");
-            Tempo();
+            AguardarLoadingSumir();
             ClicaXPath("//*[@id=\"dk_container_sltOutroMes\"]/div/ul/li[2]/a");
+            AguardarLoadingSumir();
             ConfirmaMesExtrato();
         }
 
         private void FazerLogin()
         {
-            var usuarioid = "nomeUsuario";
-            AguardarId(usuarioid);
-            DigitaTextoId(usuarioid, _banco.LerConfiguracao("usuario"));
+            AguardarLoadingSumir();
+            var idEsperado = "nomeUsuario";
+            AguardarId(idEsperado);
+            DigitaTextoId(idEsperado, _banco.LerConfiguracao("usuario"));
 
             ClicaId("tpPessoaFisica");
 
-            ClicaId("btnLogin");
-            Tempo();
-            ClicaId("lnkInitials", true);
-            AguardarXPath("//*[@id=\"teclado\"]/ul/li[contains(@class, 'key') and text()='a']");
+            idEsperado = "btnLogin";
+            Aguardar(By.Id(idEsperado), true);
+            ClicaId(idEsperado);
+            AguardarLoadingSumir();
+
+            idEsperado = "lnkInitials";
+            Aguardar(By.Id(idEsperado), true);
+            ClicaId(idEsperado, true);
+            AguardarLoadingSumir();
+
+            Aguardar(By.XPath("//*[@id=\"teclado\"]/ul/li[contains(@class, 'key') and text()='a']"), true);
 
             var senha = _banco.LerConfiguracao("senha");
 
@@ -181,6 +192,7 @@ namespace AEGF.BancosViaSite
                 builder.MoveToElement(elemento).Click().Perform();
             }
             ClicaId("btnConfirmar");
+            AguardarLoadingSumir();
 
         }
 
@@ -218,6 +230,15 @@ namespace AEGF.BancosViaSite
         protected override string URLSite()
         {
             return "https://internetbanking.caixa.gov.br/SIIBC/index.processa";
+        }
+
+        protected void AguardarLoadingSumir()
+        {
+            Tempo(5);
+            while (HabilitadoXPath("//div[contains(@class, 'modalBgLoading')]"))
+            {
+                Tempo(10);
+            }
         }
     }
 }

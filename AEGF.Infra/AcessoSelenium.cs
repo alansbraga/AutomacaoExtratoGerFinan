@@ -160,7 +160,7 @@ namespace AEGF.Infra
 
         protected void Aguardar(By seletor)
         {
-            Aguardar(seletor, true, 60, false);
+            Aguardar(seletor, true, 6000, false);
         }
 
         //protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 60)
@@ -168,7 +168,7 @@ namespace AEGF.Infra
         //    Aguardar(seletor, garantirHabilitado, segundos, false);
         //}
 
-        protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 60, bool trocaPopUp = false)
+        protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 6000, bool trocaPopUp = false)
         {
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(segundos));
 
