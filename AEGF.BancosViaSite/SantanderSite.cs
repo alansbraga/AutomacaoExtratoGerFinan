@@ -240,10 +240,18 @@ namespace AEGF.BancosViaSite
         {
             DigitaTextoId("cfp", _banco.LerConfiguracao("CPF"));
             ClicaXPath("//*[@id=\"formularioFisica\"]/fieldset/ul/li[2]/input");
+            FechaPlugin();
             DigitaTextoId("senha", _banco.LerConfiguracao("Senha"));
             ClicaXPath("//div[contains(@class, 'form-group')]//input[@id='Entrar']");
         }
 
+        private void FechaPlugin()
+        {
+            var id = "splash-10000-remind-me-later";
+            AguardarId(id);
+            ClicaId(id);
+            
+        }
 
         private void Inicio()
         {

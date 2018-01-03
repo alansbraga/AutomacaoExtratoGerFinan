@@ -137,9 +137,9 @@ namespace AEGF.Infra
             dropdown.SelectByIndex(valor);
         }
 
-        protected void AguardarId(string id)
+        protected void AguardarId(string id, bool garantirHabilitado = true)
         {
-            Aguardar(By.Id(id));
+            Aguardar(By.Id(id), garantirHabilitado);
         }
 
         protected void AguardarName(string id)
