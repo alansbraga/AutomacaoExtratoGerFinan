@@ -42,6 +42,8 @@ namespace AEGF.BancosViaSite
 
         private bool LerCartaoAtual()
         {
+            // lista dos cartões disponiveis não selecionados //div[@data-tst='card.list.item.name']
+
             var elementos = driver.FindElements(By.XPath("//td[contains(@onclick, 'changeCard')]"));
             if (_cartaoAtual >= elementos.Count)
                 return false;
@@ -175,20 +177,21 @@ namespace AEGF.BancosViaSite
 
         private void FazerLogin()
         {
-
-            DigitaTextoId("usuario", _banco.LerConfiguracao("usuario"));
-            ClicaId("button");
-            AguardarId("password");
+            var id = "_fastAccess_INSTANCE_fastAccess_login";
+            AguardarId(id, false);
+            DigitaTextoId(id, _banco.LerConfiguracao("usuario"));                          
+            ClicaId("_fastAccess_INSTANCE_fastAccess_adyz");
+            AguardarXPath("//input[@name='_login_password']");
             var senha = _banco.LerConfiguracao("senha");
             foreach (var letra in senha)
             {
                 var elemento =
                     driver.FindElement(
-                        By.Name(letra.ToString()));
+                        By.XPath($"//button[@data-tst='{letra.ToString()}']"));
                 Actions builder = new Actions(driver);
                 builder.MoveToElement(elemento).Click().Perform();
             }
-            ClicaId("acessarps");
+            ClicaId("_login_rdaa");
         }
 
 
