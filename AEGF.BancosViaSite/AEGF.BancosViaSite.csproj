@@ -87,6 +87,7 @@
     <Compile Include="CEFSiteFisico.cs" />
     <Compile Include="BBSiteJuridico.cs" />
     <Compile Include="BanestesSite.cs" />
+    <Compile Include="CitibankSite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CEFSiteJuridico.cs" />
     <Compile Include="CetelemSite.cs" />

@@ -40,6 +40,7 @@ namespace AutomacaoExtratoGerFinanConsole
             gerenciadorBanco.AdicionaBancoAcesso(new CEFSiteJuridico());
             gerenciadorBanco.AdicionaBancoAcesso(new BanestesSite());
             gerenciadorBanco.AdicionaBancoAcesso(new BBSiteJuridico());
+            gerenciadorBanco.AdicionaBancoAcesso(new CitibankSite());
 
             var integrador = new IntegrarServicoAplicacao(gerenciadorGF, gerenciadorBanco);
             var extratos = integrador.IntegrarContas();

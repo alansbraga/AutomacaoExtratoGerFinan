@@ -179,8 +179,26 @@ namespace AEGF.BancosViaSite
         {
             var id = "_fastAccess_INSTANCE_fastAccess_login";
             AguardarId(id, false);
-            DigitaTextoId(id, _banco.LerConfiguracao("usuario"));                          
-            ClicaId("_fastAccess_INSTANCE_fastAccess_adyz");
+            
+            var query = driver.FindElements(By.Id(id));
+            IWebElement elementoT = null;
+            foreach (var element in query)
+            {
+                if (element.Enabled)
+                    elementoT = element;
+            }
+            elementoT.SendKeys(_banco.LerConfiguracao("usuario"));
+
+
+            query = driver.FindElements(By.Id(id));
+            elementoT = null;
+            foreach (var element in query)
+            {
+                if (element.Enabled)
+                    elementoT = element;
+            }
+            elementoT.Click();
+
             AguardarXPath("//input[@name='_login_password']");
             var senha = _banco.LerConfiguracao("senha");
             foreach (var letra in senha)

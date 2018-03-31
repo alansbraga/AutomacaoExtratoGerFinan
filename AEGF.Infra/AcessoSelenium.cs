@@ -187,7 +187,7 @@ namespace AEGF.Infra
                     return retorno;
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return false;
                 }
