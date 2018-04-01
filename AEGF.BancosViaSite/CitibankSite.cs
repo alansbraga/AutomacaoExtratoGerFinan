@@ -39,15 +39,12 @@ namespace AEGF.BancosViaSite
             var xpath = "//*[@id=\"contentMenu\"]//a[text() = 'Faturas']";
             AguardarXPath(xpath);
             ClicaXPath(xpath, true);
-            //TrocaFrameId("cc_iframe", true);
             ClicaXPath("//*[@id=\"/ICARD/icardTransactionHistoryContext\"]//a[text()='Fatura Fechada']", true);
-            //TrocaFrameId("cc_iframe", true);
             var ultimaDataStr = LerTexto(By.XPath("//*[@id=\"appRcpTbl\"]//span[@class='applabelFalt']"));
             ultimaData = DateTime.Parse(ultimaDataStr);
             LerCartao();
             ultimaData = ultimaData.AddMonths(1);
-            ClicaXPath("//*[@id=\"/ICARD/icardTransactionHistoryContext\"]//a[text()='Fatura Aberta']", true);
-            TrocaFrameId("cc_iframe", true);
+            ClicaXPath("//*[@id=\"/ICARD/icardTransactionHistoryContext\"]//a[text()='Próxima Fatura']", true);
             LerCartao();
         }
 
@@ -66,7 +63,7 @@ namespace AEGF.BancosViaSite
             {
                 var colunas = tr.FindElements(By.TagName("td"));
 
-                if (colunas.Count != 3)
+                if (colunas.Count != 5)
                     continue;
                 var texto = colunas[1].Text.Trim();
                 if (texto == "Descritivo")
@@ -83,14 +80,11 @@ namespace AEGF.BancosViaSite
                     continue;
                 transacao.Data = data;
 
-                var trValor = colunas[2].FindElements(By.XPath("//td"));
-                if (trValor.Count != 2)
-                    continue;
                 var multiplicador = -1;
 
-                if (trValor[1].Text.Trim() == "+")
+                if (colunas[4].Text.Trim() == "+")
                     multiplicador = 1;
-                var strValor = trValor[0].Text.Trim();
+                var strValor = colunas[3].Text.Trim();
 
                 if (!Double.TryParse(strValor, out var valor))
                     continue;
