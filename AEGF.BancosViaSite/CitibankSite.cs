@@ -39,19 +39,31 @@ namespace AEGF.BancosViaSite
             var xpath = "//*[@id=\"contentMenu\"]//a[text() = 'Faturas']";
             AguardarXPath(xpath);
             ClicaXPath(xpath, true);
-            ClicaXPath("//*[@id=\"/ICARD/icardTransactionHistoryContext\"]//a[text()='Fatura Fechada']", true);
-            var ultimaDataStr = LerTexto(By.XPath("//*[@id=\"appRcpTbl\"]//span[@class='applabelFalt']"));
+            xpath = "//*[@id=\"/ICARD/icardTransactionHistoryContext\"]//a[text()='Fatura Fechada']";
+            AguardarXPath(xpath);
+            ClicaXPath(xpath, true);
+            Tempo(5);
+            xpath = "//*[@id=\"appRcpTbl\"]//span[@class='applabelFalt']";
+            AguardarXPath(xpath);
+            var ultimaDataStr = LerTexto(By.XPath(xpath));
             ultimaData = DateTime.Parse(ultimaDataStr);
             LerCartao();
             ultimaData = ultimaData.AddMonths(1);
-            ClicaXPath("//*[@id=\"/ICARD/icardTransactionHistoryContext\"]//a[text()='Próxima Fatura']", true);
+            Tempo(5);
+            xpath = "//*[@id=\"/ICARD/icardTransactionHistoryContext\"]//a[text()='Próxima Fatura']";
+            AguardarXPath(xpath);
+            ClicaXPath(xpath, true);
+            Tempo(5);
             LerCartao();
         }
 
         private void LerCartao()
         {
-            var trs = driver.FindElements(By.XPath("//*[@id=\"/ICARD/icardTransactionHistoryContext\"]/table[@class='appCellBorder1']/tbody/tr"));
-            var nome = LerTextoXPath("//*[@id=\"appRcpTbl\"]/table/tbody//div[contains(@class, 'plnTxt')]");
+            var xpath = "//*[@id=\"/ICARD/icardTransactionHistoryContext\"]/table[@class='appCellBorder1']/tbody/tr";
+            AguardarXPath(xpath);
+            var trs = driver.FindElements(By.XPath(xpath));
+            xpath = "//*[@id=\"appRcpTbl\"]/table/tbody//div[contains(@class, 'plnTxt')]";
+            var nome = LerTextoXPath(xpath);
 
             var extrato = new Extrato
             {
@@ -109,13 +121,13 @@ namespace AEGF.BancosViaSite
             Clica(By.Name("password"));
 
             var senha = _banco.LerConfiguracao("senha");
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
 
             foreach (var letra in senha)
             {
-                IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
                 js.ExecuteScript($"add('{letra}');");
             }
-
+            js.ExecuteScript("hideVkb(null);");
             ClicaId("link_avtEnterSite");
         }
 

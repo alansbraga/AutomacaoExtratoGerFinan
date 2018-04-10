@@ -74,9 +74,11 @@ namespace AEGF.GFViaSite
 
             var inputFile = janelaModal.FindElement(By.CssSelector("input.x-form-file"));
             inputFile.SendKeys(arquivo);
+            Tempo(2);
 
             var inputs = janelaModal.FindElements(By.CssSelector("input.x-form-text"));
             inputs[1].SendKeys(contaDestino);
+            Tempo(2);
             var botao = janelaModal.FindElement(By.XPath("//button[text()='Avançar']"));
             janelaModal.Click();
             botao.Click();
