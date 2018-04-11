@@ -92,10 +92,10 @@ namespace AEGF.BancosViaSite
                     continue;
                 transacao.Data = data;
 
-                var multiplicador = -1;
+                var multiplicador = 1;
 
                 if (colunas[4].Text.Trim() == "+")
-                    multiplicador = 1;
+                    multiplicador = -1;
                 var strValor = colunas[3].Text.Trim();
 
                 if (!Double.TryParse(strValor, out var valor))
