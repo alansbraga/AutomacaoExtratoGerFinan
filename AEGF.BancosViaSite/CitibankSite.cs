@@ -59,6 +59,10 @@ namespace AEGF.BancosViaSite
 
         private void LerCartao()
         {
+            if (ExisteXPath("//span[contains(@class, 'apptxthi') and text()='Não há transações disponíveis']"))
+                return;
+
+
             var xpath = "//*[@id=\"/ICARD/icardTransactionHistoryContext\"]/table[@class='appCellBorder1']/tbody/tr";
             AguardarXPath(xpath);
             var trs = driver.FindElements(By.XPath(xpath));

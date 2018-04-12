@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -168,17 +169,22 @@ namespace AEGF.Infra
         //    Aguardar(seletor, garantirHabilitado, segundos, false);
         //}
 
-        protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 6000, bool trocaPopUp = false)
+        protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 30, bool trocaPopUp = false)
         {
+            var tempoEspera = TimeSpan.FromSeconds(segundos);
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(segundos));
+            wait.PollingInterval = TimeSpan.FromSeconds(5);
+            wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
 
+            var sw = new Stopwatch();
+            sw.Start();
             wait.Until(webDriver =>
             {
                 try
-                {
+                {                    
                     if (trocaPopUp)
                         //FORÇA UM FOCO NO POPUP QUE ABRIU !!!!
-                        driver.SwitchTo().Window(driver.WindowHandles.ToList().Last());
+                        webDriver.SwitchTo().Window(webDriver.WindowHandles.ToList().Last());
 
                     var element = webDriver.FindElement(seletor);
                     var retorno = element != null;
@@ -189,6 +195,9 @@ namespace AEGF.Infra
                 }
                 catch (Exception ex)
                 {
+                    if (sw.Elapsed > tempoEspera)
+                        return true;
+
                     return false;
                 }
             });
