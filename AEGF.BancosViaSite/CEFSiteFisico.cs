@@ -49,6 +49,8 @@ namespace AEGF.BancosViaSite
 
         private void VaiParaSelecaoExtrato()
         {
+            driver.Navigate().GoToUrl("https://internetbanking.caixa.gov.br/sinbc/nb/home#!/sinbc/nb/carrossel");
+            Tempo();
             driver.Navigate().GoToUrl("https://internetbanking.caixa.gov.br/SIIBC/interna#!/extrato_periodo.processa");
             Tempo();
         }
