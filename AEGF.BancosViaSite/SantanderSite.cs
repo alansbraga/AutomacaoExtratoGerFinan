@@ -238,8 +238,10 @@ namespace AEGF.BancosViaSite
 
         private void FazerLogin()
         {
-            DigitaTextoName("txtCPF", _banco.LerConfiguracao("CPF"));
-            driver.FindElement(By.Name("txtCPF")).SendKeys(Keys.Return);            
+            var name = "txtCPF";
+            AguardarName(name);
+            DigitaTextoName(name, _banco.LerConfiguracao("CPF"));
+            driver.FindElement(By.Name(name)).SendKeys(Keys.Return);            
             FechaPlugin();
             DigitaTextoId("senha", _banco.LerConfiguracao("Senha"));
             ClicaXPath("//div[contains(@class, 'form-group')]//input[@id='Entrar']");
