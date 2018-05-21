@@ -98,7 +98,7 @@ namespace AEGF.Infra
 
         protected void DigitaTextoXPath(string xPath, string valor)
         {
-            DigitaTexto(By.Id(xPath), valor);
+            DigitaTexto(By.XPath(xPath), valor);
         }
 
         protected void Clica(By seletor, bool aguardar = false)
