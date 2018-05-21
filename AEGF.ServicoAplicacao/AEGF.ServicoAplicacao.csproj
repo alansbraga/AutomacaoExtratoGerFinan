@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotLiquid, Version=2.0.254.0, Culture=neutral, PublicKeyToken=82e46016ecf9f07c, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotLiquid.2.0.254\lib\net45\DotLiquid.dll</HintPath>
+    <Reference Include="DotLiquid, Version=2.0.262.0, Culture=neutral, PublicKeyToken=82e46016ecf9f07c, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotLiquid.2.0.262\lib\net45\DotLiquid.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
