@@ -251,7 +251,8 @@ namespace AEGF.BancosViaSite
         {
             var id = "splash-10000-remind-me-later";
             AguardarId(id);
-            ClicaId(id);
+            if (ExisteId(id))
+                ClicaId(id);
             
         }
 
