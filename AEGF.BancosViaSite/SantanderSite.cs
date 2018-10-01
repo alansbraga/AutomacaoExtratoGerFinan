@@ -155,8 +155,8 @@ namespace AEGF.BancosViaSite
         private void LerExtrato()
         {
             ClicaId("ctacorrente");
-            ClicaXPath("//*[@id=\"subMenu-ctacorrente\"]//a[text() = 'Extrato Conta Corrente']");
-            ClicaXPath("//a[@id=\"daterange7\" and text() = '30 dias' ]");
+            ClicaXPath("//*[@id=\"subMenu-ctacorrente\"]//a[text() = 'Extrato Conta Corrente']", true);
+            ClicaXPath("//a[@id=\"daterange7\" and text() = '30 dias' ]", true);
             Tempo();
 
             LerTabelaExtrato();
@@ -187,14 +187,11 @@ namespace AEGF.BancosViaSite
 
         private static void AdicionaItensCC(Extrato extrato, ReadOnlyCollection<IWebElement> linhas)
         {
+            DateTime ultimaData = DateTime.Now;
             foreach (var linha in linhas)
             {
                 var colunas = linha.FindElements(By.TagName("td"));
-                var valorStr = colunas[2].Text;
-                if (string.IsNullOrWhiteSpace(valorStr))
-                {
-                    valorStr = colunas[3].Text;
-                }
+                var valorStr = colunas[3].Text;
                 valorStr = valorStr.Trim();
                 if (!Double.TryParse(valorStr, out double valor))
                     continue;
@@ -203,12 +200,19 @@ namespace AEGF.BancosViaSite
                 valorStr = colunas[4].Text;
                 Double.TryParse(valorStr, out double saldo);
 
-
-                var mes = colunas[0].FindElement(By.ClassName("month-format")).Text;
-                var dia = colunas[0].FindElement(By.ClassName("day-format")).Text;
-                var data = DateTime.Parse($"{dia}/{mes}/{DateTime.Now.Year}");
-                if (data > DateTime.Now)
-                    data = data.AddYears(-1);
+                DateTime data;
+                var diaMes = colunas[0].Text;
+                if (string.IsNullOrWhiteSpace(diaMes))
+                {
+                    data = ultimaData;
+                }
+                else
+                {
+                    data = DateTime.Parse($"{diaMes}/{DateTime.Now.Year}");
+                    if (data > DateTime.Now)
+                        data = data.AddYears(-1);
+                    ultimaData = data;
+                }
 
                 var item = new Transacao
                 {
