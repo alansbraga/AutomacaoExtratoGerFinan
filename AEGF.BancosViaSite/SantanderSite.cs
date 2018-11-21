@@ -249,6 +249,18 @@ namespace AEGF.BancosViaSite
             FechaPlugin();
             DigitaTextoId("senha", _banco.LerConfiguracao("Senha"));
             ClicaXPath("//div[contains(@class, 'form-group')]//input[@id='Entrar']");
+
+            AguardarQrCode();
+        }
+
+        private void AguardarQrCode()
+        {
+            // Aguardo usuário digitar o qrcode
+            AguardarId("qrcode");
+            while (ExisteId("qrcode"))
+            {
+                Tempo();
+            }
         }
 
         private void FechaPlugin()
