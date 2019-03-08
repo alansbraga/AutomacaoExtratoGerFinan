@@ -107,9 +107,16 @@ namespace AEGF.BancosViaSite
                 if (colunas.Count < 4)
                     continue;
 
+                
+
+                var descricao = colunas[1].Text.Trim();
+
+                if (descricao.ToUpper() == "SUBTOTAL")
+                    continue;
+
                 var transacao = new Transacao
                 {
-                    Descricao = colunas[1].Text.Trim()
+                    Descricao = descricao
                 };
 
                 if (!DateTime.TryParse(colunas[0].Text.Trim(), out var data))
@@ -156,6 +163,7 @@ namespace AEGF.BancosViaSite
         {
             ClicaId("ctacorrente");
             ClicaXPath("//*[@id=\"subMenu-ctacorrente\"]//a[text() = 'Extrato Conta Corrente']", true);
+            Tempo();
             ClicaXPath("//a[@id=\"daterange7\" and text() = '30 dias' ]", true);
             Tempo();
 
