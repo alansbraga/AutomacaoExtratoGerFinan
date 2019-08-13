@@ -79,11 +79,15 @@ namespace AEGF.Infra
 
                 sDescricao = sDescricao.Replace('&', 'e');
 
+                var id = item.Data.ToString("yyyyMMdd");
+                id += sDescricao.GetHashCode();
+                id += valor.GetHashCode();
+
                 novo.AppendLine("\t\t\t\t\t<STMTTRN>");
                 novo.AppendLine("\t\t\t\t\t\t<TRNTYPE>OTHER");
                 novo.AppendLine("\t\t\t\t\t\t<DTPOSTED>" + FormataData(data));
                 novo.AppendLine("\t\t\t\t\t\t<TRNAMT>" + FormataValor(valor));
-                novo.AppendLine("\t\t\t\t\t\t<FITID>00000000");
+                novo.AppendLine("\t\t\t\t\t\t<FITID>" + id);
                 novo.AppendLine("\t\t\t\t\t\t<CHECKNUM>00000000");
                 novo.AppendLine("\t\t\t\t\t\t<PAYEEID>0");
                 novo.AppendLine("\t\t\t\t\t\t<MEMO>" + sDescricao);
