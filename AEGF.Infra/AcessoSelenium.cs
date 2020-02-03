@@ -29,19 +29,12 @@ namespace AEGF.Infra
 
         protected virtual IWebDriver CriarBrowser(Browser browser = Browser.ChromeDriver)
         {
-            switch (browser)
+            return browser switch
             {
-                default:
-                case Browser.ChromeDriver:
-                    return new ChromeDriver();
-                    //break;
-                case Browser.FirefoxDriver:
-                    return new FirefoxDriver();
-                    //break;
-                case Browser.InternetExplorerDriver:
-                    return new InternetExplorerDriver();
-                    //break;
-            }
+                Browser.FirefoxDriver => new FirefoxDriver(),
+                Browser.InternetExplorerDriver => new InternetExplorerDriver(),
+                _ => new ChromeDriver(),
+            };
         }
 
         protected void FecharBrowser()
@@ -172,8 +165,10 @@ namespace AEGF.Infra
         protected void Aguardar(By seletor, bool garantirHabilitado = true, int segundos = 30, bool trocaPopUp = false)
         {
             var tempoEspera = TimeSpan.FromSeconds(segundos);
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(segundos));
-            wait.PollingInterval = TimeSpan.FromSeconds(5);
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(segundos))
+            {
+                PollingInterval = TimeSpan.FromSeconds(5)
+            };
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
 
             var sw = new Stopwatch();

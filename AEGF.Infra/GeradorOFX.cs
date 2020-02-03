@@ -63,7 +63,7 @@ namespace AEGF.Infra
             {
                 var valor = item.Valor;
                 if (_opcoes.MultiplicarMenosUm)
-                    valor = valor*-1;
+                    valor *= -1;
 
                 if ((_opcoes.IgnorarPositivos) && (!(valor < 0))) 
                     continue;
