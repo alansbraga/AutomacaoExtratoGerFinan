@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="79.0.3945.3600" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AEGF.BancosViaSite\AEGF.BancosViaSite.csproj" />
     <ProjectReference Include="..\AEGF.Dominio\AEGF.Dominio.csproj" />
     <ProjectReference Include="..\AEGF.GFViaSite\AEGF.GFViaSite.csproj" />

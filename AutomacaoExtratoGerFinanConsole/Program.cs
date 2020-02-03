@@ -49,7 +49,8 @@ namespace AutomacaoExtratoGerFinanConsole
             resumoFinal.CriarResumo(saida, extratos, integrador.Erros);            
             unidadeTrabalho.Gravar();
 
-            Process.Start(saida);
+            //TODO: Mudar para modo não dependente do SO
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {saida}"));
         }
     }
 }
