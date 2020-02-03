@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AEGF.Dominio;
 using AEGF.Dominio.Servicos;
 using AEGF.Infra;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
 
 namespace AEGF.BancosViaSite
 {
