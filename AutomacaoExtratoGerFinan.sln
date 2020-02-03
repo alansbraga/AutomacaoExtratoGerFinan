@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AEGF.GFViaSite", "AEGF.GFVi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AEGF.BancosViaSite", "AEGF.BancosViaSite\AEGF.BancosViaSite.csproj", "{4D85B5D0-54F6-47A3-AD40-DD93072E5EC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AEGF.ServicoAplicacao", "AEGF.ServicoAplicacao\AEGF.ServicoAplicacao.csproj", "{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,5 +88,17 @@ Global
 		{4D85B5D0-54F6-47A3-AD40-DD93072E5EC5}.Release|x64.Build.0 = Release|Any CPU
 		{4D85B5D0-54F6-47A3-AD40-DD93072E5EC5}.Release|x86.ActiveCfg = Release|Any CPU
 		{4D85B5D0-54F6-47A3-AD40-DD93072E5EC5}.Release|x86.Build.0 = Release|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Debug|x64.Build.0 = Debug|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Debug|x86.Build.0 = Debug|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Release|x64.ActiveCfg = Release|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Release|x64.Build.0 = Release|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Release|x86.ActiveCfg = Release|Any CPU
+		{CE92C1C3-0ED0-40D5-B221-CDCE8A6D33CE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
